@@ -1,0 +1,592 @@
+{
+  "IVirtualTableProps": [
+    {
+      "name": "defaultValue",
+      "description": "虚拟表格默认值",
+      "type": "Value",
+      "defaultValue": ""
+    },
+    {
+      "name": "value",
+      "description": "虚拟表格值",
+      "type": "Value",
+      "defaultValue": ""
+    },
+    {
+      "name": "onChange",
+      "description": "表格值变化的回调函数",
+      "type": "(v: Value) => void",
+      "defaultValue": ""
+    },
+    {
+      "name": "columns",
+      "description": "表格配置项",
+      "type": "ColumnProps[]",
+      "defaultValue": ""
+    },
+    {
+      "name": "disabled",
+      "description": "全局禁用",
+      "type": "boolean",
+      "defaultValue": "false"
+    },
+    {
+      "name": "readonly",
+      "description": "全局只读",
+      "type": "boolean",
+      "defaultValue": "false"
+    },
+    {
+      "name": "scrollWidth",
+      "description": "滑动宽度",
+      "type": "number",
+      "defaultValue": "0"
+    },
+    {
+      "name": "maxHeight",
+      "description": "最大表格高度",
+      "type": "number",
+      "defaultValue": "500"
+    },
+    {
+      "name": "operateItems",
+      "description": "显示的操作项",
+      "type": "OperateItemsProps[]",
+      "defaultValue": "[{ type: Operate.Del, disabled: false }; { type: Operate.Add, disabled: false }]"
+    },
+    {
+      "name": "operateConfig",
+      "description": "操作列配置项",
+      "type": "OperateConfigProps",
+      "defaultValue": ""
+    },
+    {
+      "name": "isOperationBtnVisible",
+      "description": "是否关闭表格操作",
+      "type": "boolean",
+      "defaultValue": "false"
+    },
+    {
+      "name": "addText",
+      "description": "添加行自定义文案",
+      "type": "string",
+      "defaultValue": "添加行"
+    },
+    {
+      "name": "delText",
+      "description": "删除行自定义文案",
+      "type": "string",
+      "defaultValue": "删除"
+    },
+    {
+      "name": "moveUpText",
+      "description": "向上移动行自定义文案",
+      "type": "string",
+      "defaultValue": "上移"
+    },
+    {
+      "name": "moveDownText",
+      "description": "向下移动行自定义文案",
+      "type": "string",
+      "defaultValue": "下移"
+    },
+    {
+      "name": "empty",
+      "description": "空数据状态",
+      "type": "React.ReactNode | string",
+      "defaultValue": ""
+    },
+    {
+      "name": "addLimit",
+      "description": "添加上限",
+      "type": "number",
+      "defaultValue": ""
+    },
+    {
+      "name": "addLimitText",
+      "description": "添加上限文案",
+      "type": "(() => void) | string",
+      "defaultValue": ""
+    },
+    {
+      "name": "rowSelection",
+      "description": "选择功能配置",
+      "type": "RowSelectionProps",
+      "defaultValue": ""
+    },
+    {
+      "name": "expandable",
+      "description": "展开功能的配置",
+      "type": "ExpandableProps",
+      "defaultValue": ""
+    },
+    {
+      "name": "onMounted",
+      "description": "注册一个回调函数，在组件挂载完成后执行",
+      "type": "() => void",
+      "defaultValue": ""
+    },
+    {
+      "name": "onScroll",
+      "description": "监听当前滑动",
+      "type": "(v: {clientHeight: number;scrollHeight: number;scrollTop: number;})",
+      "defaultValue": ""
+    }
+  ],
+  "IValue": [
+    {
+      "name": "Value",
+      "description": "值",
+      "type": "RecordType",
+      "defaultValue": ""
+    }
+  ],
+  "ColumnProps": [
+    {
+      "name": "initialValue",
+      "description": "初始化数据",
+      "type": "any",
+      "defaultValue": ""
+    },
+    {
+      "name": "fieldkey",
+      "description": "唯一标识",
+      "type": "string",
+      "defaultValue": ""
+    },
+    {
+      "name": "label",
+      "description": "列名",
+      "type": "string | React.ReactNode",
+      "defaultValue": ""
+    },
+    {
+      "name": "layoutMode",
+      "description": "布局方式",
+      "type": "Layout",
+      "defaultValue": "vertical"
+    },
+    {
+      "name": "columnDisabled",
+      "description": "当前列是否禁用",
+      "type": "boolean",
+      "defaultValue": ""
+    },
+    {
+      "name": "fieldDisabled",
+      "description": "当前单元格是否禁用",
+      "type": "boolean",
+      "defaultValue": ""
+    },
+    {
+      "name": "columnShow",
+      "description": "当前列是否显示",
+      "type": "boolean",
+      "defaultValue": ""
+    },
+    {
+      "name": "fieldShow",
+      "description": "当前单元格是否显示",
+      "type": "boolean",
+      "defaultValue": ""
+    },
+    {
+      "name": "width",
+      "description": "单元格固定宽度",
+      "type": "number",
+      "defaultValue": ""
+    },
+    {
+      "name": "style",
+      "description": "样式",
+      "type": "React.CSSProperties",
+      "defaultValue": ""
+    },
+    {
+      "name": "rules",
+      "description": "校验规则",
+      "type": "RuleProps[]",
+      "defaultValue": ""
+    },
+    {
+      "name": "bottomContent",
+      "description": "单元格底部插槽",
+      "type": "string | React.ReactNode | ((v: any, config: ISlotProps) => string | React.ReactNode)",
+      "defaultValue": ""
+    },
+    {
+      "name": "topContent",
+      "description": "单元格顶部插槽",
+      "type": "string | React.ReactNode | ((v: any, config: ISlotProps) => string | React.ReactNode)",
+      "defaultValue": ""
+    },
+    {
+      "name": "prefix",
+      "description": "单元格操作元素前端缀",
+      "type": "string | React.ReactNode | ((v: any, config: ISlotProps) => string | React.ReactNode)",
+      "defaultValue": ""
+    },
+    {
+      "name": "suffix",
+      "description": "单元格操作元素后缀",
+      "type": "string | React.ReactNode | ((v: any, config: ISlotProps) => string | React.ReactNode)",
+      "defaultValue": ""
+    },
+    {
+      "name": "attrs",
+      "description": "组件属性",
+      "type": "AttrsProps",
+      "defaultValue": ""
+    },
+    {
+      "name": "watch",
+      "description": "支持观察对象",
+      "type": "WatchProps | WatchProps[]",
+      "defaultValue": ""
+    },
+    {
+      "name": "sortDirections",
+      "description": "支持的排序方式",
+      "type": "Array<string>",
+      "defaultValue": "[ascend, descend]"
+    },
+    {
+      "name": "sorter",
+      "description": "排序函数",
+      "type": "Function | boolean | { compare: Function, multiple: number }",
+      "defaultValue": ""
+    },
+    {
+      "name": "sortIcon",
+      "description": "自定义 sort 图标",
+      "type": "(props: { sortOrder }) => React.ReactNode",
+      "defaultValue": ""
+    },
+    {
+      "name": "filters",
+      "description": "表头的筛选菜单项",
+      "type": "object[]",
+      "defaultValue": ""
+    },
+    {
+      "name": "onFilter",
+      "description": "筛选的运行函数",
+      "type": "(value: any, record: RecordType) => boolean",
+      "defaultValue": ""
+    },
+    {
+      "name": "filterSearch",
+      "description": "筛选菜单项是否可搜索",
+      "type": "boolean | ((value: any, record: RecordType) => boolean)",
+      "defaultValue": ""
+    },
+    {
+      "name": "filterIcon",
+      "description": "自定义 filter 图标",
+      "type": "React.ReactNode | ((filtered: boolean) => React.ReactNode)",
+      "defaultValue": ""
+    },
+    {
+      "name": "fixed",
+      "description": "设置固定列",
+      "type": "boolean | string",
+      "defaultValue": "false"
+    },
+    {
+      "name": "colSpan",
+      "description": "表头列合并",
+      "type": "number",
+      "defaultValue": ""
+    },
+    {
+      "name": "onCell",
+      "description": "设置单元格属性",
+      "type": "(record, rowIndex) => React.HTMLAttributes<any> & React.TdHTMLAttributes<any>",
+      "defaultValue": ""
+    },
+    {
+      "name": "type",
+      "description": "表单类型",
+      "type": "Type | `${Type}`",
+      "defaultValue": ""
+    },
+    {
+      "name": "custom",
+      "description": "自定义组件",
+      "type": "ComponentType<any> | CustomReactNode | { edit: CustomReactNode; display: CustomReactNode }",
+      "defaultValue": ""
+    },
+    {
+      "name": "options",
+      "description": "下拉选项",
+      "type": "OptionProps[]",
+      "defaultValue": ""
+    },
+    {
+      "name": "require",
+      "description": "是否必填",
+      "type": "boolean",
+      "defaultValue": ""
+    },
+    {
+      "name": "children",
+      "description": "子项列配置",
+      "type": "ColumnProps[]",
+      "defaultValue": ""
+    }
+  ],
+  "OperateItemsProps": [
+    {
+      "name": "type",
+      "description": "快捷操作按钮类型",
+      "type": "Operate.Add | Operate.Del | Operate.MoveDown | Operate.MoveUp",
+      "defaultValue": ""
+    },
+    {
+      "name": "custom",
+      "description": "自定义操作按钮",
+      "type": "(props: { disabled: boolean; delRow: () => void; moveRowUp: () => void; moveDownUp: () => void; changeRowValue: (value: RecordType) => void; changeCellValue: (fieldkey: string, value: RecordType) => void; } & TableCellProps) => React.ReactNode",
+      "defaultValue": ""
+    },
+    {
+      "name": "disabled",
+      "description": "禁用状态",
+      "type": "boolean | ((cellProps: TableCellProps) => boolean)",
+      "defaultValue": ""
+    }
+  ],
+  "OperateConfigProps": [
+    {
+      "name": "label",
+      "description": "操作列名称",
+      "type": "string",
+      "defaultValue": ""
+    },
+    {
+      "name": "fieldkey",
+      "description": "操作列key",
+      "type": "string",
+      "defaultValue": ""
+    },
+    {
+      "name": "width",
+      "description": "操作列宽度",
+      "type": "number",
+      "defaultValue": ""
+    },
+    {
+      "name": "layout",
+      "description": "操作按钮布局方式",
+      "type": "Layout",
+      "defaultValue": ""
+    },
+    {
+      "name": "isFixedOperate",
+      "description": "操作列是否设置固定列 - 向右",
+      "type": "boolean",
+      "defaultValue": ""
+    }
+  ],
+  "CustomReactNode": [
+    {
+      "name": "CustomReactNode",
+      "description": "主要接受 value, onChange 实现，包括其他辅助参数",
+      "type": "(props: TableCellProps & IBaseItem['attrs'] & { value: any; onChange: (value: any) => void }) => React.ReactNode | React.JSX.Element",
+      "defaultValue": ""
+    }
+  ],
+  "WatchProps": [
+    {
+      "name": "handle",
+      "description": "执行函数",
+      "type": "(value: any, config: WatchPropsHandleConfig) => void",
+      "defaultValue": ""
+    },
+    {
+      "name": "deps",
+      "description": "依赖的fieldkey",
+      "type": "string[]",
+      "defaultValue": ""
+    },
+    {
+      "name": "immediately",
+      "description": "是否立即执行",
+      "type": "boolean",
+      "defaultValue": "false"
+    },
+    {
+      "name": "way",
+      "description": "监听方式",
+      "type": "Way.Cell | Way.Col | Way.Pre | Way.Next | number | ((index: number) => boolean)",
+      "defaultValue": "field"
+    }
+  ],
+  "WatchPropsHandleConfig": [
+    {
+      "name": "store",
+      "description": "当前表格数据",
+      "type": "RecordType[]",
+      "defaultValue": ""
+    },
+    {
+      "name": "rowIndex",
+      "description": "当前字段所在行数",
+      "type": "number",
+      "defaultValue": ""
+    },
+    {
+      "name": "ssid",
+      "description": "当前字段行唯一标识",
+      "type": "string",
+      "defaultValue": ""
+    },
+    {
+      "name": "emitSsid",
+      "description": "监听当前列所有field模式下，显示触发行唯一标识",
+      "type": "string",
+      "defaultValue": ""
+    },
+    {
+      "name": "updateSelfConfig",
+      "description": "更新当前字段配置",
+      "type": "(params: any) => void",
+      "defaultValue": ""
+    },
+    {
+      "name": "updateCellData",
+      "description": "更新当前字段数据",
+      "type": "(value: any) => void",
+      "defaultValue": ""
+    },
+    {
+      "name": "updateColData",
+      "description": "更新当前列所有此字段数据",
+      "type": "(value: any) => void",
+      "defaultValue": ""
+    },
+    {
+      "name": "validateCol",
+      "description": "检验当前列所有此字段规则",
+      "type": "() => void",
+      "defaultValue": ""
+    },
+    {
+      "name": "validateSelf",
+      "description": "检验当前字段规则",
+      "type": "() => void",
+      "defaultValue": ""
+    }
+  ],
+  "RowSelectionProps": [
+    {
+      "name": "columnWidth",
+      "description": "自定义列表选择框宽度",
+      "type": "number",
+      "defaultValue": ""
+    },
+    {
+      "name": "type",
+      "description": "选择列类型",
+      "type": "'radio' | 'checkbox'",
+      "defaultValue": ""
+    },
+    {
+      "name": "selectedRowKeys",
+      "description": "选中值",
+      "type": "number[]",
+      "defaultValue": ""
+    },
+    {
+      "name": "onChange",
+      "description": "选中回调",
+      "type": "(I: number[], D: Value) => void",
+      "defaultValue": ""
+    },
+    {
+      "name": "getCheckboxProps",
+      "description": "选择框的默认属性配置",
+      "type": "(record: RecordType) => Partial<Omit<CheckboxProps, 'checked' | 'defaultChecked'>>",
+      "defaultValue": ""
+    },
+    {
+      "name": "selections",
+      "description": "自定义选择项配置项",
+      "type": "Array<{ key: string; text: React.ReactNode; onSelect?: (currentRowKeys: React.Key[]) => void; } | 'SELECT_ALL' | 'SELECT_INVERT' | 'SELECT_NONE'> | boolean",
+      "defaultValue": ""
+    }
+  ],
+  "ExpandableProps": [
+    {
+      "name": "expandedRowRender",
+      "description": "额外的展开行",
+      "type": "(record: RecordType, index: number, indent: number, expanded: boolean) => React.ReactNode",
+      "defaultValue": ""
+    },
+    {
+      "name": "rowExpandable",
+      "description": "设置是否允许行展开",
+      "type": "(record: RecordType) => boolean",
+      "defaultValue": ""
+    },
+    {
+      "name": "expandedRowKeys",
+      "description": "展开的行，控制属性",
+      "type": "string[]",
+      "defaultValue": ""
+    },
+    {
+      "name": "defaultExpandedRowKeys",
+      "description": "默认展开的行",
+      "type": "string[]",
+      "defaultValue": ""
+    },
+    {
+      "name": "defaultExpandAllRows",
+      "description": "初始时，是否展开所有行",
+      "type": "boolean",
+      "defaultValue": ""
+    },
+    {
+      "name": "expandRowByClick",
+      "description": "通过点击行来展开子行",
+      "type": "boolean",
+      "defaultValue": ""
+    },
+    {
+      "name": "onExpand",
+      "description": "点击展开图标时触发",
+      "type": "(expanded: boolean, record: RecordType) => void",
+      "defaultValue": ""
+    }
+  ],
+  "RuleExtendProps": [
+    {
+      "name": "ssid",
+      "description": "当前字段行唯一标识",
+      "type": "number",
+      "defaultValue": ""
+    },
+    {
+      "name": "rowIndex",
+      "description": "当前字段所在行数",
+      "type": "number",
+      "defaultValue": ""
+    },
+    {
+      "name": "fieldkey",
+      "description": "唯一标识",
+      "type": "string",
+      "defaultValue": ""
+    },
+    {
+      "name": "getStore",
+      "description": "获取更新前的表格数据",
+      "type": "() => Value",
+      "defaultValue": ""
+    }
+  ]
+}
+
+
+
+  

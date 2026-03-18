@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+    "strict": false,
+    "declaration": false,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
+    "jsx": "react",
+    "baseUrl": "./",
+    "paths": {
+      "@@/*": [".dumi/tmp/*"],
+      "react-VFormTable": ["src"],
+      "react-VFormTable/*": ["src/*", "*"]
+    }
+  },
+  "ts-node": {
+    "transpileOnly": true,
+    "files": true
+  },
+  "include": [".dumirc.ts", "src/**/*"]
+}

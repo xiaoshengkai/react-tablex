@@ -1,0 +1,23 @@
+
+/* 行内布局 */
+.virtualLayout {
+  width: 100%;
+  padding: 0 8px;
+  box-sizing: border-box;
+  
+  .virtual_item--horizontal {
+    display: flex;
+    align-items: center;
+  
+    .virtual_item {
+      // margin-left: 8px;
+      margin-bottom: 0;
+  
+      &:last-child {
+        margin-bottom: 10px;
+        margin-bottom: 0;
+      }
+    }
+  }
+}
+

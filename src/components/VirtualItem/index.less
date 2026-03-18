@@ -1,0 +1,55 @@
+@import './commom.less';
+
+.virtual_item {  
+  width: 100%;
+  // padding: 8px 8px 8px 0;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+
+  &--error {
+    color: #f00;
+    padding: 5px;
+  }
+
+  .doraemon-input:has(&--children) {
+    border-color: #f00 !important;
+  }
+
+  &--children {
+    border-color: #f00 !important;
+
+    div, input, textarea {
+      border-color: #f00 !important;
+    }
+  }
+
+  &_label--wrap {
+    display: inline-grid;
+    grid-template-columns: auto 1fr;
+    align-items:center;
+  }
+
+  &_children--wrap {
+    width: calc(100% - 16px)!important;
+    display: inline-grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    padding: 8px;
+  }
+
+  &_children--prefix {
+    width: 100%;
+    margin-right: 5px;
+  }
+
+  &_children--suffix {
+    width: 100%;
+    margin-left: 5px;
+  }
+
+  span.doraemon-radio + * {
+    padding-right: 8px;
+  }
+}

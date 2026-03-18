@@ -1,0 +1,53 @@
+.virtualTable {
+  position: relative;
+
+  &_wrap {
+    overflow: auto;
+
+    &--empty {
+      height: 204px;
+    }
+  }
+
+  &_footer {
+    line-height: 44px;
+    background-color: #fff;
+    text-align: center;
+    border-bottom: 1px solid #eee;
+    border-right: 1px solid #eee;
+    border-left: 1px solid #eee;
+  }
+
+  &_empty {
+    width: 100%;
+    height: 160px;
+    text-align: center;
+    color: rgba(0, 0, 0, 0.45);
+    font-size: 14px;
+    border-top: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+
+    > * {
+      pointer-events: auto;
+    }
+  }
+
+  &_operate {
+    display: flex;
+    // padding: 8px;
+    padding: 8px 8px 8px 16px;
+
+    &__vertical {
+      flex-direction: column;
+    }
+  }
+
+  .ant-table-measure-row {
+    display: none;
+  }
+}
+
+

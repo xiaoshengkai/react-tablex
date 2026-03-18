@@ -1,0 +1,13 @@
+node_modules
+/dist
+/build
+.dumi/tmp
+.dumi/tmp-test
+.dumi/tmp-production
+.DS_Store
+package-lock.json
+/esm
+/lib
+coverage
+.opencode/
+work-logs/
