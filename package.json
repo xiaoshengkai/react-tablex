@@ -36,7 +36,11 @@
     "test:single": "jest test/other.spec.ts",
     "preversion": "npm install --force",
     "version": "father doctor && npm run build && npm run docs:build && git add -A",
+<<<<<<< HEAD
     "postversion": "git push && git push --tags"
+=======
+    "postversion": "git push && git push --tags && npm publish"
+>>>>>>> main
   },
   "commitlint": {
     "extends": [

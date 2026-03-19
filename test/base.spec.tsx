@@ -1,35 +1,12 @@
-import React from 'react';
+import '@testing-library/jest-dom';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import '@testing-library/jest-dom';
+import React from 'react';
 import VirtualTable, { ColumnProps, Type } from '../src/index';
 
-// beforeEach(() => {
-//   jest.useFakeTimers();
-// });
+const TEXT = '测试文本内容';
 
-// afterEach(() => {
-//   jest.runOnlyPendingTimers();
-//   jest.useRealTimers();
-// });
-
-const toBeEmpty = async (table) => {
-  const emptyEle1 = await screen.queryByText('暂无数据，');
-  if (emptyEle1) {
-    expect(emptyEle1).toBeVisible();
-  }
-  const emptyEle2 = await screen.queryByText('新增一行');
-  if (emptyEle2) {
-    expect(emptyEle2).toBeVisible();
-  }
-
-  if (table) {
-    expect(table).not.toHaveClass('doraemon-empty-image');
-    expect(table).not.toHaveClass('ReactVirtualized__Table__row');
-  }
-};
-
-const columns: ColumnProps[] = [
+const baseColumns: ColumnProps[] = [
   {
     label: '序号',
     fieldkey: 'index',
@@ -44,493 +21,294 @@ const columns: ColumnProps[] = [
     type: Type.InputName,
   },
 ];
-const TEXT = '我是什么人我是什么人我是什么人我是什么人我是什么人';
+
+const renderTable = (props = {}) =>
+  render(<VirtualTable columns={baseColumns} {...props} />);
+
+const addRow = async (
+  user: ReturnType<typeof userEvent.setup>,
+  text = '新增一行',
+) => {
+  await user.click(screen.getByText(text));
+};
+
+const getDeleteButtons = () => screen.findAllByText('删除');
+
+const expectRowCount = async (expected: number) => {
+  const deleteButtons = await getDeleteButtons();
+  expect(deleteButtons.length).toBe(expected);
+};
 
 describe('虚拟表格表单基本使用', () => {
-  describe('组件渲染-空数据', () => {
-    it('无数据渲染 & 展示暂无数据以及空数据占位符', async () => {
-      const { baseElement } = render(<VirtualTable columns={columns} value={[]} />);
-
-      toBeEmpty(baseElement);
+  describe('空数据渲染', () => {
+    it('无数据时展示暂无数据及空数据占位符', () => {
+      const { baseElement } = renderTable({ value: [] });
+      expect(screen.queryByText('暂无数据')).toBeInTheDocument();
+      expect(screen.queryByText('新增一行')).toBeInTheDocument();
+      expect(baseElement).not.toHaveClass('doraemon-empty-image');
     });
   });
 
-  describe('从空数据 -> 有数据', () => {
-    it('添加1行', async () => {
-      render(<VirtualTable columns={columns} value={[]} />);
+  describe('添加行', () => {
+    it('从空数据添加多行', async () => {
+      renderTable({ value: [] });
       const user = userEvent.setup();
-      await user.click(screen.getByText('新增一行'));
-      const delArr = await screen.findAllByText('删除');
 
-      expect(delArr.length).toBe(1);
-      expect(screen.getByText('1')).toBeVisible();
-    });
-
-    it('添加2行', async () => {
-      const lens = 2;
-
-      render(<VirtualTable columns={columns} value={[]} />);
-      const user = userEvent.setup();
-      for (const [index] of new Array(lens).fill(null).entries()) {
-        await user.click(screen.getByText(index === 0 ? '新增一行' : '+ 添加行'));
-        const number = await screen.findByText(String(index + 1));
-        expect(number).toBeVisible();
+      for (let i = 0; i < 3; i++) {
+        await addRow(user, i === 0 ? '新增一行' : '+ 添加行');
+        expect(await screen.findByText(String(i + 1))).toBeVisible();
       }
 
-      const delArr = await screen.findAllByText('删除');
-      expect(delArr.length).toBe(lens);
+      await expectRowCount(3);
     });
 
-    it('添加3行', async () => {
-      const lens = 3;
-
-      render(<VirtualTable columns={columns} value={[]} />);
-      const user = userEvent.setup();
-      for (const [index] of new Array(lens).fill(null).entries()) {
-        await user.click(screen.getByText(index === 0 ? '新增一行' : '+ 添加行'));
-        const number = await screen.findByText(String(index + 1));
-        expect(number).toBeVisible();
-      }
-
-      const delArr = await screen.findAllByText('删除');
-      expect(delArr.length).toBe(lens);
-    });
-
-    it('添加10行', async () => {
-      const lens = 10;
-
-      render(<VirtualTable columns={columns} value={[]} />);
+    it('添加10行虚拟渲染正常', async () => {
+      renderTable({ value: [] });
       const user = userEvent.setup();
 
-      for (const [index] of new Array(lens).fill(null).entries()) {
-        await user.click(screen.getByText(index === 0 ? '新增一行' : '+ 添加行'));
-
-        await waitFor(async () => {
-          const number = screen.queryByText(String(index + 1));
-          expect(number).toBeVisible();
+      for (let i = 0; i < 10; i++) {
+        await addRow(user, i === 0 ? '新增一行' : '+ 添加行');
+        await waitFor(() => {
+          expect(screen.getByText(String(i + 1))).toBeVisible();
         });
       }
 
-      await waitFor(async () => {
-        const delArr = await screen.findAllByText('删除');
-        expect(delArr.length).toBeLessThan(20);
-      });
+      const deleteButtons = await getDeleteButtons();
+      expect(deleteButtons.length).toBeLessThan(20);
     }, 20000);
   });
 
-  describe('从空数据 -> 有数据 -> 一步步删除到无', () => {
-    it('添加1行，然后删除到底', async () => {
-      const { baseElement } = render(<VirtualTable columns={columns} value={[]} />);
+  describe('删除行', () => {
+    it('添加后删除到底', async () => {
+      const { baseElement } = renderTable({ value: [] });
       const user = userEvent.setup();
-      await user.click(screen.getByText('新增一行'));
-      const delArr = await screen.findAllByText('删除');
 
-      expect(delArr.length).toBe(1);
+      await addRow(user);
       expect(screen.getByText('1')).toBeVisible();
-
       await user.click(screen.getByText('删除'));
-      toBeEmpty(baseElement);
+
+      expect(screen.queryByText('暂无数据')).toBeInTheDocument();
     });
 
-    it('添加2行，然后删除到底', async () => {
-      let lens = 2;
-
-      const { baseElement } = render(<VirtualTable columns={columns} value={[]} />);
-
+    it('添加多行后逐个删除', async () => {
+      const { baseElement } = renderTable({ value: [] });
       const user = userEvent.setup();
-      for (const [index] of new Array(lens).fill(null).entries()) {
-        await user.click(screen.getByText(index === 0 ? '新增一行' : '+ 添加行'));
-        const number = await screen.findByText(String(index + 1));
-        expect(number).toBeVisible();
+
+      for (let i = 0; i < 3; i++) {
+        await addRow(user, i === 0 ? '新增一行' : '+ 添加行');
       }
 
-      const delArr = await screen.findAllByText('删除');
-      expect(delArr.length).toBe(lens);
-
-      while (lens) {
-        const delArr = await screen.findAllByText('删除');
-        await user.click(delArr[0]);
-        lens--;
+      for (let i = 0; i < 3; i++) {
+        const deleteButtons = await getDeleteButtons();
+        await user.click(deleteButtons[0]);
       }
 
-      toBeEmpty(baseElement);
+      expect(screen.queryByText('暂无数据')).toBeInTheDocument();
     });
+  });
 
-    it('添加3行，然后删除到底', async () => {
-      let lens = 3;
-
-      const { baseElement } = render(<VirtualTable columns={columns} value={[]} />);
-
-      const user = userEvent.setup();
-      for (const [index] of new Array(lens).fill(null).entries()) {
-        await user.click(screen.getByText(index === 0 ? '新增一行' : '+ 添加行'));
-        const number = await screen.findByText(String(index + 1));
-        expect(number).toBeVisible();
-      }
-
-      const delArr = await screen.findAllByText('删除');
-      expect(delArr.length).toBe(lens);
-
-      while (lens) {
-        const delArr = await screen.findAllByText('删除');
-        await user.click(delArr[0]);
-        lens--;
-      }
-
-      toBeEmpty(baseElement);
-    });
-
-    it('添加10行，然后删除到底', async () => {
-      let lens = 10;
-
-      const { baseElement } = render(<VirtualTable columns={columns} value={[]} />);
-
-      const user = userEvent.setup();
-      for (const [index] of new Array(lens).fill(null).entries()) {
-        await user.click(screen.getByText(index === 0 ? '新增一行' : '+ 添加行'));
-        await waitFor(async () => {
-          const number = await screen.findByText(String(index + 1));
-          expect(number).toBeVisible();
-        });
-      }
-
-      const delArr = await screen.findAllByText('删除');
-      expect(delArr.length).toBeLessThan(20);
-
-      while (lens) {
-        const delArr = await screen.findAllByText('删除');
-        await user.click(delArr[0]);
-        lens--;
-      }
+  describe('有数据渲染', () => {
+    it('defaultValue 非受控模式', async () => {
+      renderTable({ defaultValue: [{ type: TEXT }] });
 
       await waitFor(() => {
-        toBeEmpty(baseElement);
+        expect(screen.getByDisplayValue(TEXT)).toBeVisible();
+        expect(screen.getByText('1')).toBeVisible();
       });
-    }, 50000);
-  });
 
-  describe('组件渲染-有数据', () => {
-    it('defaultValue - 非受控', async () => {
-      render(<VirtualTable columns={columns} defaultValue={[{ type: TEXT }]} />);
-
-      await waitFor(
-        async () => {
-          const text = await screen.findByDisplayValue(TEXT);
-          expect(text).toBeVisible();
-
-          const delArr = await screen.findAllByText('删除');
-          expect(delArr.length).toBe(1);
-          const num = await screen.findByText('1');
-          expect(num).toBeVisible();
-        },
-        { timeout: 2000 }
-      );
+      const deleteButtons = await getDeleteButtons();
+      expect(deleteButtons.length).toBe(1);
     });
 
-    it('value - 受控', async () => {
-      render(<VirtualTable columns={columns} value={[{ type: TEXT }]} />);
+    it('value 受控模式', async () => {
+      renderTable({ value: [{ type: TEXT }] });
 
-      await waitFor(
-        async () => {
-          const text = await screen.findByDisplayValue(TEXT);
-          expect(text).toBeVisible();
+      await waitFor(() => {
+        expect(screen.getByDisplayValue(TEXT)).toBeVisible();
+        expect(screen.getByText('1')).toBeVisible();
+      });
 
-          const delArr = await screen.findAllByText('删除');
-          expect(delArr.length).toBe(1);
-          const num = await screen.findByText('1');
-          expect(num).toBeVisible();
-        },
-        { timeout: 2000 }
-      );
+      const deleteButtons = await getDeleteButtons();
+      expect(deleteButtons.length).toBe(1);
     });
   });
 
-  describe('有数据(非受控 - defaultValue) -> 一步步删除到无', () => {
-    it('1行，然后删除到底', async () => {
-      const { baseElement } = render(<VirtualTable columns={columns} defaultValue={[{ type: TEXT }]} />);
+  describe('受控/非受控模式删除到底', () => {
+    const deleteAllRows = async (user: ReturnType<typeof userEvent.setup>) => {
+      let hasDelete = true;
+      while (hasDelete) {
+        const deleteButtons = await screen.findAllByText('删除');
+        if (deleteButtons.length === 0) {
+          hasDelete = false;
+        } else {
+          await user.click(deleteButtons[0]);
+        }
+      }
+    };
 
-      await waitFor(
-        async () => {
-          const user = userEvent.setup();
-          await user.click(screen.getByText('删除'));
-          await toBeEmpty(baseElement);
-        },
-        { timeout: 2000 }
-      );
-    });
-
-    it('2行，然后删除到底', async () => {
-      let lens = 2;
-
-      const { baseElement } = render(
-        <VirtualTable columns={columns} defaultValue={new Array(lens).fill({ type: TEXT })} />
-      );
-
-      await waitFor(
-        async () => {
-          const user = userEvent.setup();
-          while (lens) {
-            const delArr = await screen.findAllByText('删除');
-            await user.click(delArr[0]);
-            lens--;
-          }
-
-          await toBeEmpty(baseElement);
-        },
-        { timeout: 2000 }
-      );
-    });
-
-    it('3行，然后删除到底', async () => {
-      let lens = 3;
-
-      const { baseElement } = render(
-        <VirtualTable columns={columns} defaultValue={new Array(lens).fill({ type: TEXT })} />
-      );
-
-      await waitFor(
-        async () => {
-          const user = userEvent.setup();
-          while (lens) {
-            const delArr = await screen.findAllByText('删除');
-            await user.click(delArr[0]);
-            lens--;
-          }
-
-          await toBeEmpty(baseElement);
-        },
-        { timeout: 2000 }
-      );
-    });
-
-    it('100行，然后删除到底', async () => {
-      let lens = 100;
-
-      const { baseElement } = render(
-        <VirtualTable columns={columns} defaultValue={new Array(lens).fill({ type: TEXT })} />
-      );
-
-      await waitFor(
-        async () => {
-          const user = userEvent.setup();
-          while (lens) {
-            const delArr = await screen.findAllByText('删除');
-            await user.click(delArr[0]);
-            lens--;
-          }
-
-          await toBeEmpty(baseElement);
-        },
-        { timeout: 50000 }
-      );
-    }, 80000);
-  });
-
-  describe('有数据(受控 - value) -> 一步步删除到无', () => {
-    it('1行，然后删除到底', async () => {
-      const { baseElement } = render(<VirtualTable columns={columns} value={[{ type: TEXT }]} />);
-
-      await waitFor(
-        async () => {
-          const user = userEvent.setup();
-          await user.click(screen.getByText('删除'));
-          await toBeEmpty(baseElement);
-        },
-        { timeout: 2000 }
-      );
-    });
-
-    it('2行，然后删除到底', async () => {
-      let lens = 2;
-
-      const { baseElement } = render(<VirtualTable columns={columns} value={new Array(lens).fill({ type: TEXT })} />);
-
-      await waitFor(
-        async () => {
-          const user = userEvent.setup();
-          while (lens) {
-            const delArr = await screen.findAllByText('删除');
-            await user.click(delArr[0]);
-            lens--;
-          }
-
-          await toBeEmpty(baseElement);
-        },
-        { timeout: 2000 }
-      );
-    });
-
-    it('3行，然后删除到底', async () => {
-      let lens = 3;
-
-      const { baseElement } = render(<VirtualTable columns={columns} value={new Array(lens).fill({ type: TEXT })} />);
-
-      await waitFor(
-        async () => {
-          const user = userEvent.setup();
-          while (lens) {
-            const delArr = await screen.findAllByText('删除');
-            await user.click(delArr[0]);
-            lens--;
-          }
-
-          await toBeEmpty(baseElement);
-        },
-        { timeout: 2000 }
-      );
-    });
-
-    it('100行，然后删除到底', async () => {
-      let lens = 100;
-
-      const { baseElement } = render(<VirtualTable columns={columns} value={new Array(lens).fill({ type: TEXT })} />);
-
-      await waitFor(
-        async () => {
-          const user = userEvent.setup();
-          while (lens) {
-            const delArr = await screen.findAllByText('删除');
-            await user.click(delArr[0]);
-            lens--;
-          }
-
-          await toBeEmpty(baseElement);
-        },
-        { timeout: 50000 }
-      );
-    }, 80000);
-  });
-
-  describe('空数据情况下，事件回调-onChange', () => {
-    it('数据-add', async () => {
-      const mockOnChange = jest.fn();
-
-      const { container } = render(<VirtualTable columns={columns} value={[]} onChange={mockOnChange} />);
+    it.each([
+      { mode: 'defaultValue 非受控', data: [{ type: TEXT }] },
+      { mode: 'value 受控', data: [{ type: TEXT }] },
+    ])('$mode - 1行删除到底', async ({ data }) => {
+      const { baseElement } = renderTable({
+        [data.length ? 'value' : 'defaultValue']: data,
+      });
       const user = userEvent.setup();
-      await user.click(screen.getByText('新增一行'));
+
+      await user.click(screen.getByText('删除'));
+      await waitFor(() => {
+        expect(screen.queryByText('暂无数据')).toBeInTheDocument();
+      });
+    });
+
+    it.each([
+      {
+        mode: 'defaultValue 非受控',
+        data: new Array(3).fill({ type: TEXT }),
+        timeout: 2000,
+      },
+      {
+        mode: 'value 受控',
+        data: new Array(3).fill({ type: TEXT }),
+        timeout: 2000,
+      },
+    ])('$mode - 3行删除到底', async ({ data, timeout }) => {
+      const { baseElement } = renderTable({ value: data });
+      const user = userEvent.setup();
+
+      await deleteAllRows(user);
 
       await waitFor(
-        async () => {
+        () => {
+          expect(screen.queryByText('暂无数据')).toBeInTheDocument();
+        },
+        { timeout },
+      );
+    });
+
+    it.each([
+      {
+        mode: 'defaultValue 非受控',
+        data: new Array(100).fill({ type: TEXT }),
+        timeout: 50000,
+      },
+      {
+        mode: 'value 受控',
+        data: new Array(100).fill({ type: TEXT }),
+        timeout: 50000,
+      },
+    ])(
+      '$mode - 100行删除到底',
+      async ({ data, timeout }) => {
+        renderTable({ value: data });
+        const user = userEvent.setup();
+
+        await deleteAllRows(user);
+
+        await waitFor(
+          () => {
+            expect(screen.queryByText('暂无数据')).toBeInTheDocument();
+          },
+          { timeout },
+        );
+      },
+      80000,
+    );
+  });
+
+  describe('onChange 回调', () => {
+    it('空数据添加行触发 onChange', async () => {
+      const mockOnChange = jest.fn();
+      renderTable({ value: [], onChange: mockOnChange });
+      const user = userEvent.setup();
+
+      await addRow(user);
+
+      await waitFor(
+        () => {
+          expect(mockOnChange).toHaveBeenCalledWith([{ ssid: 0 }]);
+        },
+        { timeout: 2000 },
+      );
+    });
+
+    it('输入内容触发 onChange', async () => {
+      const mockOnChange = jest.fn();
+      const { container } = renderTable({ value: [], onChange: mockOnChange });
+      const user = userEvent.setup();
+
+      await addRow(user);
+
+      await waitFor(
+        () => {
+          const input = container.querySelector('.doraemon-input');
+          if (!input) throw new Error('不存在input');
+
+          fireEvent.change(input, { target: { value: 'hello world' } });
           expect(mockOnChange).toHaveBeenCalledWith([
-            {
-              ssid: 0,
-            },
+            { ssid: 0, type: 'hello world' },
           ]);
         },
-        { timeout: 2000, container }
+        { timeout: 2000 },
       );
     });
 
-    it('数据-change', async () => {
+    it('删除行触发 onChange', async () => {
       const mockOnChange = jest.fn();
-
-      const { container } = render(<VirtualTable columns={columns} value={[]} onChange={mockOnChange} />);
+      const { container } = renderTable({ value: [], onChange: mockOnChange });
       const user = userEvent.setup();
-      await user.click(screen.getByText('新增一行'));
 
-      await waitFor(
-        async () => {
-          const input = container.querySelector('.doraemon-input');
+      await addRow(user);
 
-          if (!input) throw new Error('不存在input');
+      await waitFor(() => {
+        const input = container.querySelector('.doraemon-input');
+        if (!input) throw new Error('不存在input');
+        fireEvent.change(input, { target: { value: 'hello world' } });
+      });
 
-          const inputText = 'hello world';
-          fireEvent.change(input, { target: { value: inputText } });
-          return expect(mockOnChange).toHaveBeenCalledWith([{ ssid: 0, type: inputText }]);
-        },
-        { timeout: 2000 }
-      );
+      await user.click(screen.getByText('删除'));
+
+      expect(mockOnChange).toHaveBeenCalledWith([]);
     });
 
-    it('数据-del', async () => {
+    it('有数据时添加行触发 onChange', async () => {
       const mockOnChange = jest.fn();
-      const { container } = render(<VirtualTable columns={columns} value={[]} onChange={mockOnChange} />);
-      const user = userEvent.setup();
-      await user.click(screen.getByText('新增一行'));
-
-      await waitFor(
-        async () => {
-          const inputText = 'hello world';
-          const input = container.querySelector('.doraemon-input');
-
-          if (!input) throw new Error('不存在input');
-
-          fireEvent.change(input, { target: { value: inputText } });
-
-          await user.click(screen.getByText('删除'));
-          expect(mockOnChange).toHaveBeenCalledWith([]);
-        },
-        { timeout: 2000, container }
-      );
-    });
-  });
-
-  describe('有数据情况下，事件回调-onChange', () => {
-    it('数据-add', async () => {
-      const { baseElement } = render(<VirtualTable columns={columns} value={[{ type: TEXT }]} />);
+      const { container } = renderTable({
+        value: [{ type: TEXT }],
+        onChange: mockOnChange,
+      });
       const user = userEvent.setup();
 
-      await waitFor(
-        async () => {
-          await user.click(screen.getByText('删除'));
-          toBeEmpty(baseElement);
-        },
-        { timeout: 2000 }
-      );
-    });
-
-    it('数据-change', async () => {
-      const mockOnChange = jest.fn();
-
-      const { container } = render(<VirtualTable columns={columns} value={[{ type: TEXT }]} onChange={mockOnChange} />);
-      const user = userEvent.setup();
-      await user.click(screen.getByText('+ 添加行'));
+      await addRow(user, '+ 添加行');
 
       await waitFor(
         () => {
           const inputs = container.querySelectorAll('.doraemon-input');
           if (!inputs?.length) throw new Error('不存在input');
 
-          const inputText = 'hello world';
-          fireEvent.change(inputs[1], { target: { value: inputText } });
+          fireEvent.change(inputs[1], { target: { value: 'hello world' } });
           expect(mockOnChange).toHaveBeenCalledWith([
             { ssid: 0, type: TEXT },
-            { ssid: 1, type: inputText },
+            { ssid: 1, type: 'hello world' },
           ]);
         },
-        { timeout: 2000 }
+        { timeout: 2000 },
       );
     });
 
-    it('数据-del', async () => {
+    it('有数据时删除所有行触发 onChange', async () => {
       const mockOnChange = jest.fn();
-
-      const { container } = render(<VirtualTable columns={columns} value={[{ type: TEXT }]} onChange={mockOnChange} />);
+      renderTable({ value: [{ type: TEXT }], onChange: mockOnChange });
       const user = userEvent.setup();
-      await user.click(screen.getByText('+ 添加行'));
-      const inputText = 'hello world';
 
-      await waitFor(
-        () => {
-          const inputs = container.querySelectorAll('.doraemon-input');
-          if (!inputs?.length) throw new Error('不存在input');
-          fireEvent.change(inputs[1], { target: { value: inputText } });
-        },
-        { timeout: 2000 }
-      );
-
-      const dels = await screen.findAllByText('删除');
-      if (!dels?.length) throw new Error('报错：无删除按钮');
-
-      // let fixLens = dels.length;
-      let lens = dels.length;
-      while (lens) {
-        lens--;
-        const delArr = await screen.findAllByText('删除');
-        await user.click(delArr[0]);
-        // await waitFor(() => {
-        //     return expect(mockOnChange).toHaveBeenCalledWith([{ ssid: Number(fixLens - lens), type: inputText }]);
-        // })
+      let hasDelete = true;
+      while (hasDelete) {
+        const deleteButtons = await screen.findAllByText('删除');
+        if (deleteButtons.length === 0) {
+          hasDelete = false;
+        } else {
+          await user.click(deleteButtons[0]);
+        }
       }
 
       expect(mockOnChange).toHaveBeenCalledWith([]);

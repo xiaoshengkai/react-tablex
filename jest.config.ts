@@ -1,4 +1,5 @@
 export default {
+  setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],
   transform: {
     '.(ts|tsx)': 'ts-jest',
   },
