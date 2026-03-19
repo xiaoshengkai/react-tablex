@@ -2,7 +2,7 @@
 import * as React from 'react';
 import { useContext, useEffect, useRef, useState } from 'react';
 import {Icon} from 'antd'
-import {LeftOutlined, LeftOutlined, BarsOutlined} from '@ant-design/icons'
+import {LeftOutlined, RightOutlined, BarsOutlined} from '@ant-design/icons'
 import classNames from 'classnames';
 import omit from 'rc-util/lib/omit';
 
