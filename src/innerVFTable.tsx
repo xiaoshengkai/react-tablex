@@ -1,7 +1,7 @@
 /** @format */
 
-import { Button, Empty, message } from 'antd';
 import { useMount, useUpdateEffect } from 'ahooks';
+import { Button, Empty, message } from 'antd';
 import { cloneDeep, compact, get, isEqual, isUndefined } from 'lodash';
 import React, {
   useEffect,
@@ -10,6 +10,7 @@ import React, {
   useRef,
   useState,
 } from 'react';
+import { Components } from './builtInUI/antd/element';
 import {
   add,
   allFieldsOperate,
@@ -40,7 +41,6 @@ import {
 } from './common/type';
 import { createNextTick } from './common/util';
 import RalVirtualTable from './components/VirtualTable';
-import { Components } from './builtInUI/antd/element';
 
 import './style/index.less';
 
@@ -104,7 +104,7 @@ const InnerVFTable = (
     addLimit,
     addLimitText,
     onMounted,
-    BaseComponents = Components,
+    BaseComponents = Components as any,
     ...rest
   }: IVirtualTableProps & IVirtualTableExtendProps,
   refInstance,
@@ -361,7 +361,6 @@ const InnerVFTable = (
     })();
   }, [value]);
 
-
   /** 初始化 */
   useMount(async () => {
     /** 生命周期 */
@@ -402,14 +401,14 @@ const InnerVFTable = (
                   },
                 }
               : {})}
-              {...(rest?.expandable
-                ? {
+            {...(rest?.expandable
+              ? {
                   expandable: {
-                      columnWidth: 52,
-                      ...(rest?.expandable || {}),
-                    },
-                  }
-                : {})}
+                    columnWidth: 52,
+                    ...(rest?.expandable || {}),
+                  },
+                }
+              : {})}
             dataSource={dataSourceMemo}
             onScroll={onScroll}
             columns={columnsMemo}
@@ -423,7 +422,9 @@ const InnerVFTable = (
                       <Empty
                         description={
                           <div>
-                            <span>暂无数据 {isOperationBtnVisible ? '' : '，' }</span>
+                            <span>
+                              暂无数据 {isOperationBtnVisible ? '' : '，'}
+                            </span>
                             {!isOperationBtnVisible && addBtnProps && (
                               <React.Fragment>
                                 <Button

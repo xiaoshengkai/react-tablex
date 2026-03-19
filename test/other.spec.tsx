@@ -11,17 +11,8 @@ import VirtualTable, {
   Way,
 } from '../src/index';
 
-beforeEach(() => {
-  jest.useFakeTimers();
-});
-
-afterEach(() => {
-  jest.runOnlyPendingTimers();
-  jest.useRealTimers();
-});
-
 describe('其他-特殊场景', () => {
-  it('pageConfig', async () => {
+  it('pageConfig 批量配置列', async () => {
     const columns: ColumnProps[] = [
       {
         label: '序号',
@@ -56,38 +47,27 @@ describe('其他-特殊场景', () => {
       type: {
         label: '内容123',
         require: true,
-        attrs: {
-          maxLength: 300,
-        },
+        attrs: { maxLength: 300 },
       },
       type1: {
         require: true,
-        attrs: {
-          maxLength: 300,
-        },
+        attrs: { maxLength: 300 },
         fixType: 'hide',
       },
       type2: {
         require: true,
-        attrs: {
-          maxLength: 300,
-        },
+        attrs: { maxLength: 300 },
         fixedDisable: true,
       },
     };
 
     const Demo = () => {
-      const [dateSource, setDataSource] = useState([]);
-
-      const onChange = (value) => {
-        setDataSource(value);
-      };
-
+      const [dateSource, setDataSource] = useState<any[]>([]);
       return (
         <VirtualTable
           columns={pageConfigFormat(columns, pageConfigMap)}
           value={dateSource}
-          onChange={onChange}
+          onChange={setDataSource as any}
         />
       );
     };
@@ -98,7 +78,7 @@ describe('其他-特殊场景', () => {
     });
   });
 
-  it('更新整列数据', async () => {
+  it('watch updateColData 更新整列数据', async () => {
     const columns: ColumnProps[] = [
       {
         label: '序号',
@@ -127,16 +107,11 @@ describe('其他-特殊场景', () => {
 
     const Demo = () => {
       const [dateSource, setDataSource] = useState([{}, {}, {}]);
-
-      const onChange = (value) => {
-        setDataSource(value);
-      };
-
       return (
         <VirtualTable
           columns={columns}
           value={dateSource}
-          onChange={onChange}
+          onChange={setDataSource}
         />
       );
     };
@@ -154,254 +129,201 @@ describe('其他-特殊场景', () => {
     });
   });
 
-  it('nextTick - Promise使用', async () => {
+  it('createNextTick Promise 使用', async () => {
     const nextTick = createNextTick();
-    nextTick().then(() => {
-      console.log('Promise使用');
-    });
+    const promise = nextTick();
+    expect(promise).toBeInstanceOf(Promise);
   });
 
-  it('监听式主动触发校验-validateCol', async () => {
-    const columns: ColumnProps[] = [
-      {
-        label: '序号',
-        fieldkey: 'index',
-        width: 80,
-        custom: VirtualTable.VirtualNo,
-      },
-      {
-        label: '名字（不能重复）',
-        fieldkey: 'type',
-        require: true,
-        rules: [
-          { required: true, message: '必填' },
-          {
-            validator: async (config, value, callback) => {
-              const store = config.getStore();
-
-              /** 判断是否存在重名 */
-              const exitRepeat = store.reduce((result, { ssid, type }) => {
-                if (config.ssid === ssid) {
-                  return result;
-                }
-                if (type === value || result) {
-                  return true;
-                }
-                return false;
-              }, false);
-
-              callback?.(exitRepeat ? '名字不能重复' : undefined);
-            },
-          },
-        ],
-        type: 'Input',
-        watch: {
-          handle(_, { validateCol }) {
-            validateCol();
-          },
-          deps: ['type'],
+  describe('校验相关', () => {
+    it('watch validateCol 监听式主动触发整列校验', async () => {
+      const columns: ColumnProps[] = [
+        {
+          label: '序号',
+          fieldkey: 'index',
+          width: 80,
+          custom: VirtualTable.VirtualNo,
         },
-      },
-    ];
+        {
+          label: '名字（不能重复）',
+          fieldkey: 'type',
+          require: true,
+          rules: [
+            { required: true, message: '必填' },
+            {
+              validator: async (config, value, callback) => {
+                const store = config.getStore();
+                const exitRepeat = store.reduce((result, { ssid, type }) => {
+                  if (config.ssid === ssid) return result;
+                  if (type === value || result) return true;
+                  return false;
+                }, false);
+                callback?.(exitRepeat ? '名字不能重复' : undefined);
+              },
+            },
+          ],
+          type: 'Input',
+          watch: {
+            handle(_, { validateCol }) {
+              validateCol();
+            },
+            deps: ['type'],
+          },
+        },
+      ];
 
-    const mockOnSubmit = jest.fn();
+      const mockOnSubmit = jest.fn();
 
-    const Demo = () => {
-      const [dateSource, setDataSource] = useState([{}, {}]);
-      const virtualTableRef = useRef<any>(null);
+      const Demo = () => {
+        const [dateSource, setDataSource] = useState([{}, {}]);
+        const virtualTableRef = useRef<IVirtualTableImperativeReturn>(null);
 
-      const onChange = (value) => {
-        setDataSource(value);
+        const submit = () => {
+          virtualTableRef.current?.validate().then((error) => {
+            if (!error) {
+              mockOnSubmit('检验通过');
+            }
+          });
+        };
+
+        return (
+          <div>
+            <Button onClick={submit}>提交</Button>
+            <VirtualTable
+              ref={virtualTableRef}
+              columns={columns}
+              value={dateSource}
+              onChange={setDataSource}
+            />
+          </div>
+        );
       };
 
-      const submit = () => {
-        virtualTableRef.current?.validate().then((error) => {
-          if (!error) {
-            mockOnSubmit('检验通过');
-            message.success('检验通过');
-          }
-        });
-      };
+      const { baseElement } = render(<Demo />);
 
-      return (
-        <div>
-          <Button onClick={submit} style={{ marginBottom: '20px' }}>
-            提交
-          </Button>
-          <VirtualTable
-            ref={virtualTableRef}
-            columns={columns}
-            value={dateSource}
-            onChange={onChange}
-          />
-        </div>
+      await waitFor(() => {
+        const [input1, input2] =
+          baseElement.querySelectorAll('.doraemon-input');
+        fireEvent.change(input1, { target: { value: '小盛开' } });
+        fireEvent.change(input2, { target: { value: '小盛开' } });
+      });
+
+      await waitFor(
+        () => {
+          const requireText = screen.queryAllByText('名字不能重复');
+          expect(requireText.length).toBe(2);
+        },
+        { timeout: 2000 },
       );
-    };
 
-    const { baseElement } = render(<Demo />);
+      await waitFor(() => {
+        const [, input2] = baseElement.querySelectorAll('.doraemon-input');
+        fireEvent.change(input2, { target: { value: '小盛开1' } });
+      });
 
-    const user = userEvent.setup();
+      const user = userEvent.setup();
+      await user.click(screen.getByText('提交'));
 
-    await waitFor(() => {
-      const [input1, input2] = baseElement.querySelectorAll('.doraemon-input');
-      fireEvent.change(input1, { target: { value: '小盛开' } });
-      fireEvent.change(input2, { target: { value: '小盛开' } });
+      expect(mockOnSubmit).toHaveBeenCalledWith('检验通过');
     });
 
-    await waitFor(
-      () => {
-        const requireText = screen.queryAllByText('名字不能重复');
-        expect(requireText.length).toBe(2);
-      },
-      {
-        timeout: 2000,
-      },
-    );
-
-    await waitFor(() => {
-      const [, input2] = baseElement.querySelectorAll('.doraemon-input');
-      fireEvent.change(input2, { target: { value: '小盛开1' } });
-    });
-
-    await waitFor(
-      () => {
-        const submit = screen.getByText('提交');
-        user.click(submit);
-        expect(mockOnSubmit).toHaveBeenCalledWith('检验通过');
-      },
-      {
-        timeout: 2000,
-      },
-    );
-  });
-
-  it('监听式主动触发校验-validateSelf', async () => {
-    const columns: ColumnProps[] = [
-      {
-        label: '序号',
-        fieldkey: 'index',
-        width: 80,
-        custom: VirtualTable.VirtualNo,
-      },
-      {
-        label: '角色',
-        fieldkey: 'name',
-        require: true,
-        rules: [
-          {
-            required: true,
-            message: '必填',
-          },
-        ],
-        type: 'Input',
-      },
-      {
-        label: '路人（感受）',
-        fieldkey: 'npc',
-        type: 'Input',
-        rules: [
-          {
-            validator(_, value, callback) {
-              const text = '我喜欢周星驰';
-              callback(value !== text ? text : undefined);
+    it('watch validateSelf 监听式主动触发单列校验', async () => {
+      const columns: ColumnProps[] = [
+        {
+          label: '序号',
+          fieldkey: 'index',
+          width: 80,
+          custom: VirtualTable.VirtualNo,
+        },
+        {
+          label: '角色',
+          fieldkey: 'name',
+          require: true,
+          rules: [{ required: true, message: '必填' }],
+          type: 'Input',
+        },
+        {
+          label: '路人（感受）',
+          fieldkey: 'npc',
+          type: 'Input',
+          rules: [
+            {
+              validator(_, value, callback) {
+                const text = '我喜欢周星驰';
+                callback(value !== text ? text : undefined);
+              },
             },
-          },
-        ],
-        watch: [
-          {
-            handle(value, { updateCellData, validateSelf }) {
-              if (value) {
-                updateCellData(value ? '我喜欢' + value : '');
-              }
-
-              validateSelf();
+          ],
+          watch: [
+            {
+              handle(value, { updateCellData, validateSelf }) {
+                if (value) {
+                  updateCellData(value ? '我喜欢' + value : '');
+                }
+                validateSelf();
+              },
+              deps: ['name'],
+              way: Way.Col,
+              immediately: true,
             },
-            deps: ['name'],
-            way: Way.Col,
-            immediately: true,
-          },
-        ],
-      },
-    ];
-
-    const mockOnSubmit = jest.fn();
-
-    const Demo = () => {
-      const [dateSource, setDataSource] = useState([
-        {
-          name: '李小龙',
+          ],
         },
-        {
-          name: '李小龙',
-        },
-        {
-          name: '李小龙',
-        },
-      ]);
+      ];
 
-      const virtualTableRef = useRef<any>(null);
+      const mockOnSubmit = jest.fn();
 
-      const onChange = (value) => {
-        setDataSource(value);
+      const Demo = () => {
+        const [dateSource, setDataSource] = useState<any[]>([
+          { name: '李小龙' },
+          { name: '李小龙' },
+          { name: '李小龙' },
+        ]);
+        const virtualTableRef = useRef<IVirtualTableImperativeReturn>(null);
+
+        const submit = () => {
+          virtualTableRef.current?.validate().then((error) => {
+            if (!error) {
+              mockOnSubmit('检验通过');
+            }
+          });
+        };
+
+        return (
+          <div>
+            <Button onClick={submit}>提交</Button>
+            <VirtualTable
+              ref={virtualTableRef}
+              columns={columns}
+              value={dateSource}
+              onChange={setDataSource as any}
+            />
+          </div>
+        );
       };
 
-      const submit = () => {
-        virtualTableRef.current?.validate().then((error) => {
-          if (!error) {
-            mockOnSubmit('检验通过');
-            message.success('检验通过');
-          }
-        });
-      };
+      const { baseElement } = render(<Demo />);
 
-      return (
-        <div>
-          <Button onClick={submit} style={{ marginBottom: '20px' }}>
-            提交
-          </Button>
-          <VirtualTable
-            ref={virtualTableRef}
-            columns={columns}
-            value={dateSource}
-            onChange={onChange}
-          />
-        </div>
+      await waitFor(
+        () => {
+          const requireText = screen.queryAllByText('我喜欢周星驰');
+          expect(requireText.length).toBe(3);
+        },
+        { timeout: 2000 },
       );
-    };
 
-    const { baseElement } = render(<Demo />);
+      await waitFor(() => {
+        const [input] = baseElement.querySelectorAll('.doraemon-input');
+        fireEvent.change(input, { target: { value: '周星驰' } });
+      });
 
-    const user = userEvent.setup();
+      const user = userEvent.setup();
+      await user.click(screen.getByText('提交'));
 
-    await waitFor(
-      () => {
-        const requireText = screen.queryAllByText('我喜欢周星驰');
-
-        expect(requireText.length).toBe(3);
-      },
-      {
-        timeout: 2000,
-      },
-    );
-
-    await waitFor(() => {
-      const [input] = baseElement.querySelectorAll('.doraemon-input');
-      fireEvent.change(input, { target: { value: '周星驰' } });
+      expect(mockOnSubmit).toHaveBeenCalledWith('检验通过');
     });
-
-    await waitFor(
-      () => {
-        const submit = screen.getByText('提交');
-        user.click(submit);
-        expect(mockOnSubmit).toHaveBeenCalledWith('检验通过');
-      },
-      {
-        timeout: 2000,
-      },
-    );
   });
 
-  it('Link - click', async () => {
+  it('Link 组件点击事件', async () => {
     const columns: ColumnProps[] = [
       {
         label: '序号',
@@ -415,36 +337,34 @@ describe('其他-特殊场景', () => {
         type: 'Link',
         attrs: {
           onClick() {
-            console.log('文本');
+            console.log('点击文本');
           },
         },
       },
     ];
 
-    const Demo = () => {
-      return (
-        <VirtualTable
-          columns={columns}
-          value={[
-            {
-              text: '你是谁',
-              link: {
-                text: '跳转zcyutil2.0',
-                url: 'https://ipaas.cai-inc.com/quark-index/doc/%40zcy%2Futils/api/array?version=2.0.1-alpha.12&utm=quark.9d3b44.0.0.df6da540321d11efa4e2215e337bdc75',
-              },
+    const Demo = () => (
+      <VirtualTable
+        columns={columns}
+        value={[
+          {
+            text: '你是谁',
+            link: {
+              text: '跳转链接',
+              url: 'https://example.com',
             },
-            {},
-          ]}
-          isOperationBtnVisible
-        />
-      );
-    };
+          },
+          {},
+        ]}
+        isOperationBtnVisible
+      />
+    );
 
     render(<Demo />);
 
     await waitFor(
       async () => {
-        const jump = screen.queryByText('跳转zcyutil2.0');
+        const jump = screen.queryByText('跳转链接');
         if (!jump) throw new Error('获取不到DOM');
         fireEvent.click(jump);
       },
@@ -452,7 +372,7 @@ describe('其他-特殊场景', () => {
     );
   });
 
-  it('VirtualLayout 插槽', async () => {
+  it('VirtualLayout 插槽嵌套', async () => {
     const columns: ColumnProps[] = [
       {
         label: '序号',
@@ -462,7 +382,6 @@ describe('其他-特殊场景', () => {
       },
       {
         label: '内容',
-        require: true,
         fieldkey: 'type',
         children: [
           {
@@ -488,275 +407,202 @@ describe('其他-特殊场景', () => {
           },
         ],
       },
-      {
-        label: '内容2',
-        fieldkey: 'type3',
-        children: [
-          {
-            topContent: () => 'topContent33',
-            fieldkey: 'type33',
-            label: '你有什么感悟呢33？',
-            require: true,
-            children: [
-              {
-                label: '你有什么感悟呢333？',
-                require: true,
-                topContent: () => 'topContent333',
-                fieldkey: 'type333',
-                type: 'TextArea',
-                bottomContent: () => 'bottomContent333',
-              },
-            ],
-            bottomContent: () => 'bottomContent33',
-          },
-        ],
-      },
     ];
 
     const Demo = () => {
       const [dateSource, setDataSource] = useState([{}]);
-
-      const onChange = (value) => {
-        setDataSource(value);
-      };
-
       return (
-        <div>
-          <VirtualTable
-            columns={columns}
-            value={dateSource}
-            onChange={onChange}
-          />
-        </div>
+        <VirtualTable
+          columns={columns}
+          value={dateSource}
+          onChange={setDataSource}
+        />
       );
     };
 
     render(<Demo />);
   });
 
-  it('addLimit 添加上限', async () => {
-    const columns: ColumnProps[] = [
-      {
-        label: '序号',
-        fieldkey: 'index',
-        width: 80,
-        custom: VirtualTable.VirtualNo,
-      },
-      {
-        label: '内容',
-        fieldkey: 'type',
-        require: true,
-        rules: [{ required: true, message: '必填' }],
-        type: 'Input',
-      },
-    ];
-    const addLimit = 10;
-    const mockOnChange = jest.fn();
+  describe('addLimit 添加上限', () => {
+    it('达到上限时提示', async () => {
+      const addLimit = 10;
+      const columns: ColumnProps[] = [
+        {
+          label: '序号',
+          fieldkey: 'index',
+          width: 80,
+          custom: VirtualTable.VirtualNo,
+        },
+        {
+          label: '内容',
+          fieldkey: 'type',
+          require: true,
+          rules: [{ required: true, message: '必填' }],
+          type: 'Input',
+        },
+      ];
 
-    const Demo = () => {
-      const [dateSource, setDataSource] = useState([
-        ...new Array(addLimit).fill({}),
-      ]);
+      const mockOnChange = jest.fn();
 
-      const onChange = (value) => {
-        mockOnChange(value);
-        setDataSource(value);
-      };
-
-      return (
-        <div>
+      const Demo = () => {
+        const [dateSource, setDataSource] = useState(
+          new Array(addLimit).fill({}),
+        );
+        return (
           <VirtualTable
             columns={columns}
             value={dateSource}
-            onChange={onChange}
-            addLimit={addLimit}
-          />
-        </div>
-      );
-    };
-
-    render(<Demo />);
-
-    await waitFor(() => {
-      const addBtn = screen.queryByText('+ 添加行');
-      if (!addBtn) throw new Error('获取不到: + 添加行按钮');
-      fireEvent.click(addBtn);
-    });
-
-    await waitFor(() => {
-      const messageElement = document.querySelector('.doraemon-message');
-
-      const messageText = `超过指定数量${addLimit}条`;
-      expect(messageElement).toHaveTextContent(messageText);
-      expect(mockOnChange).toHaveBeenCalledWith([
-        { ssid: 0 },
-        { ssid: 1 },
-        { ssid: 2 },
-        { ssid: 3 },
-        { ssid: 4 },
-        { ssid: 5 },
-        { ssid: 6 },
-        { ssid: 7 },
-        { ssid: 8 },
-        { ssid: 9 },
-      ]);
-    });
-  });
-
-  it('addLimitText 添加上限', async () => {
-    const columns: ColumnProps[] = [
-      {
-        label: '序号',
-        fieldkey: 'index',
-        width: 80,
-        custom: VirtualTable.VirtualNo,
-      },
-      {
-        label: '内容',
-        fieldkey: 'type',
-        require: true,
-        rules: [{ required: true, message: '必填' }],
-        type: 'Input',
-      },
-    ];
-    const addLimit = 10;
-    const mockOnChange = jest.fn();
-
-    const Demo = () => {
-      const [dateSource, setDataSource] = useState([
-        ...new Array(addLimit).fill({}),
-      ]);
-
-      const onChange = (value) => {
-        mockOnChange(value);
-        setDataSource(value);
-      };
-
-      return (
-        <div>
-          <VirtualTable
-            columns={columns}
-            value={dateSource}
-            onChange={onChange}
-            addLimit={addLimit}
-            addLimitText={() => {
-              message.warn(`超了呀`);
+            onChange={(val) => {
+              mockOnChange(val);
+              setDataSource(val);
             }}
+            addLimit={addLimit}
           />
-        </div>
-      );
-    };
+        );
+      };
 
-    render(<Demo />);
+      render(<Demo />);
 
-    await waitFor(() => {
-      const addBtn = screen.queryByText('+ 添加行');
-      if (!addBtn) throw new Error('获取不到: + 添加行按钮');
-      fireEvent.click(addBtn);
+      await waitFor(() => {
+        const addBtn = screen.queryByText('+ 添加行');
+        if (!addBtn) throw new Error('获取不到: + 添加行按钮');
+        fireEvent.click(addBtn);
+      });
+
+      await waitFor(() => {
+        const messageElement = document.querySelector('.doraemon-message');
+        expect(messageElement).toHaveTextContent(`超过指定数量${addLimit}条`);
+        expect(mockOnChange).toHaveBeenCalledWith(
+          new Array(addLimit).fill({}).map((_, i) => ({ ssid: i })),
+        );
+      });
     });
 
-    await waitFor(() => {
-      const messageElement = document.querySelector('.doraemon-message');
+    it('自定义上限提示文案', async () => {
+      const addLimit = 10;
+      const columns: ColumnProps[] = [
+        {
+          label: '序号',
+          fieldkey: 'index',
+          width: 80,
+          custom: VirtualTable.VirtualNo,
+        },
+        {
+          label: '内容',
+          fieldkey: 'type',
+          require: true,
+          rules: [{ required: true, message: '必填' }],
+          type: 'Input',
+        },
+      ];
 
-      const messageText = `超了呀`;
-      expect(messageElement).toHaveTextContent(messageText);
-      expect(mockOnChange).toHaveBeenCalledWith([
-        { ssid: 0 },
-        { ssid: 1 },
-        { ssid: 2 },
-        { ssid: 3 },
-        { ssid: 4 },
-        { ssid: 5 },
-        { ssid: 6 },
-        { ssid: 7 },
-        { ssid: 8 },
-        { ssid: 9 },
-      ]);
+      const mockOnChange = jest.fn();
+
+      const Demo = () => {
+        const [dateSource, setDataSource] = useState(
+          new Array(addLimit).fill({}),
+        );
+        return (
+          <VirtualTable
+            columns={columns}
+            value={dateSource}
+            onChange={(val) => {
+              mockOnChange(val);
+              setDataSource(val);
+            }}
+            addLimit={addLimit}
+            addLimitText={() => message.warning('超了呀')}
+          />
+        );
+      };
+
+      render(<Demo />);
+
+      await waitFor(() => {
+        const addBtn = screen.queryByText('+ 添加行');
+        if (!addBtn) throw new Error('获取不到: + 添加行按钮');
+        fireEvent.click(addBtn);
+      });
+
+      await waitFor(() => {
+        const messageElement = document.querySelector('.doraemon-message');
+        expect(messageElement).toHaveTextContent('超了呀');
+      });
     });
   });
 
-  it('实例方法', async () => {
-    const columns: ColumnProps[] = [
-      {
-        label: '序号',
-        fieldkey: 'index',
-        width: 80,
-        custom: VirtualTable.VirtualNo,
-      },
-      {
-        label: '内容',
-        fieldkey: 'type',
-        require: true,
-        rules: [{ required: true, message: '必填' }],
-        type: 'Input',
-      },
-    ];
-    const mockOnChange = jest.fn();
+  describe('实例方法', () => {
+    it('getDataSource 和 updateData', async () => {
+      const columns: ColumnProps[] = [
+        {
+          label: '序号',
+          fieldkey: 'index',
+          width: 80,
+          custom: VirtualTable.VirtualNo,
+        },
+        {
+          label: '内容',
+          fieldkey: 'type',
+          require: true,
+          rules: [{ required: true, message: '必填' }],
+          type: 'Input',
+        },
+      ];
 
-    const Demo = () => {
-      const [dateSource, setDataSource] = useState([{ type: 1 }]);
-      const virtualTableRef = useRef<IVirtualTableImperativeReturn>();
+      const mockOnChange = jest.fn();
 
-      const onChange = (value) => {
-        setDataSource(value);
-      };
+      const Demo = () => {
+        const [dateSource, setDataSource] = useState<any[]>([{ type: 1 }]);
+        const virtualTableRef = useRef<IVirtualTableImperativeReturn>(null);
 
-      const getStore = () => {
-        const store = virtualTableRef.current?.getDataSource();
-        mockOnChange(store);
-      };
+        const getStore = () => {
+          const store = virtualTableRef.current?.getDataSource();
+          mockOnChange(store);
+        };
 
-      const updateStore = () => {
-        const store = virtualTableRef.current?.updateData([
-          { type: 2 },
-          { type: 3 },
-        ]);
-        mockOnChange(store);
-      };
+        const updateStore = () => {
+          const store = virtualTableRef.current?.updateData([
+            { type: 2 },
+            { type: 3 },
+          ]);
+          mockOnChange(store);
+        };
 
-      return (
-        <div>
+        return (
           <div>
             <Button onClick={getStore}>获取数据</Button>
             <Button onClick={updateStore}>更新数据</Button>
+            <VirtualTable
+              ref={virtualTableRef}
+              columns={columns}
+              value={dateSource}
+              onChange={setDataSource as any}
+            />
           </div>
-          <VirtualTable
-            ref={virtualTableRef}
-            columns={columns}
-            value={dateSource}
-            onChange={onChange}
-          />
-        </div>
-      );
-    };
+        );
+      };
 
-    render(<Demo />);
+      render(<Demo />);
 
-    await waitFor(() => {
-      const getBtn = screen.queryByText('获取数据');
-      if (!getBtn) throw new Error('获取不到: + 获取数据按钮');
-      fireEvent.click(getBtn);
-    });
+      await waitFor(() => {
+        fireEvent.click(screen.queryByText('获取数据')!);
+      });
 
-    await waitFor(() => {
-      expect(mockOnChange).toHaveBeenCalledWith([{ type: 1, ssid: 0 }]);
-    });
+      await waitFor(() => {
+        expect(mockOnChange).toHaveBeenCalledWith([{ type: 1, ssid: 0 }]);
+      });
 
-    await waitFor(() => {
-      const setBtn = screen.queryByText('更新数据');
-      if (!setBtn) throw new Error('获取不到: + 更新数据按钮');
-      fireEvent.click(setBtn);
+      await waitFor(() => {
+        fireEvent.click(screen.queryByText('更新数据')!);
+        fireEvent.click(screen.queryByText('获取数据')!);
+      });
 
-      const getBtn = screen.queryByText('获取数据');
-      if (!getBtn) throw new Error('获取不到: + 获取数据按钮');
-      fireEvent.click(getBtn);
-    });
-
-    await waitFor(() => {
-      expect(mockOnChange).toHaveBeenCalledWith([
-        { type: 2, ssid: 0 },
-        { type: 3, ssid: 1 },
-      ]);
+      await waitFor(() => {
+        expect(mockOnChange).toHaveBeenCalledWith([
+          { type: 2, ssid: 0 },
+          { type: 3, ssid: 1 },
+        ]);
+      });
     });
   });
 });

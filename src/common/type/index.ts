@@ -318,7 +318,7 @@ export interface ColumnProps extends IBaseItem {
         display: CustomReactNode;
       };
   /** 下拉选项 */
-  options?: Options;
+  options?: OptionProps;
   /** 是否必填 */
   require?: boolean;
   /** 子项列配置 */
@@ -428,7 +428,10 @@ export interface IVirtualTableProps {
   /** 基础UI表单组件 */
   BaseComponents?: Record<
     Type,
-    React.ReactNode | ((options: OptionProps[]) => React.ReactNode)
+    {
+      edit: React.ReactNode | ((options?: any) => React.ReactNode);
+      display: React.ReactNode | ((options?: any) => React.ReactNode);
+    }
   >;
   /**
    * 全局禁用
