@@ -68,6 +68,6 @@ export default defineConfig({
   alias: {
     'react-tablex': require('path').resolve(__dirname, 'src/index.tsx'),
   },
-  base: process.env.DOC_BASE || '/' + packageJson.name + '/',
-  publicPath: process.env.DOC_ASSET_PREFIX || '/' + packageJson.name + '/',
+  base: process.env.DOC_BASE || '/react-tablex/',
+  publicPath: process.env.DOC_ASSET_PREFIX || '/react-tablex/',
 });
