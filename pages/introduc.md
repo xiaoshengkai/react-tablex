@@ -2,7 +2,7 @@
 title: 虚拟表格表单
 ---
 
-`react-tablex`是基于 `rc-table` + `自定义表格表单系统` + `自定义UI库` 编写的 React UI 组件库，用于快速编写表格表单业务，解决大数据渲染瓶颈。
+`@xiaoshengkai/react-tablex` 是基于 `rc-table` + `自定义表格表单系统` + `自定义UI库` 编写的 React UI 组件库，用于快速编写表格表单业务，解决大数据渲染瓶颈。
 
 ### ✨ 特性：
 
@@ -16,15 +16,15 @@ title: 虚拟表格表单
 :::code-group
 
 ```bash [npm]
-npm install -D react-tablex
+npm install @xiaoshengkai/react-tablex
 ```
 
 ```bash [yarn]
-yarn add -D react-tablex
+yarn add @xiaoshengkai/react-tablex
 ```
 
 ```bash [pnpm]
-pnpm add -D react-tablex
+pnpm add @xiaoshengkai/react-tablex
 ```
 
 :::
@@ -33,7 +33,7 @@ pnpm add -D react-tablex
 
 ```jsx | pure
 import React from 'react';
-import VirtualTable from 'react-tablex';
+import VirtualTable from '@xiaoshengkai/react-tablex';
 
 const columns = [
   {
@@ -105,8 +105,8 @@ export default App;
 选择功能配置
 <TsInfo  name="RowSelectionProps" ></TsInfo>
 
-
 ### ExpandableProps
+
 展开功能的配置
 <TsInfo  name="ExpandableProps" /></TsInfo>
 
@@ -206,23 +206,23 @@ export enum Type {
 `OptionProps`下拉对象数据 和 `AttrsProps`支持的组件属性说明如下 :
 
 ```ts
-import { InputProps, TextAreaProps, SearchProps } from "antd/lib/input";
-import { InputNumberProps } from "antd/lib/input-number";
-import { SelectProps } from "antd/lib/select";
-import { RadioProps } from "antd/lib/radio";
-import { CheckboxProps } from "antd/lib/checkbox";
-import { CascaderOptionType } from "antd/lib/multi-cascader/Menus";
-import { ZcyEditorProps } from "antd/lib/editor";
+import { InputProps, TextAreaProps, SearchProps } from 'antd/lib/input';
+import { InputNumberProps } from 'antd/lib/input-number';
+import { SelectProps } from 'antd/lib/select';
+import { RadioProps } from 'antd/lib/radio';
+import { CheckboxProps } from 'antd/lib/checkbox';
+import { CascaderOptionType } from 'antd/lib/multi-cascader/Menus';
+import { ZcyEditorProps } from 'antd/lib/editor';
 import {
   DatePickerProps,
   MonthPickerProps,
   RangePickerProps,
   WeekPickerProps,
-} from "antd/lib/date-picker";
-import { CascaderProps } from "antd/lib/cascader";
-import { MultiCascaderProps } from "antd/lib/multi-cascader";
-import { MentionProps } from "antd/lib/mention";
-import { AutoCompleteProps } from "antd/lib/auto-complete";
+} from 'antd/lib/date-picker';
+import { CascaderProps } from 'antd/lib/cascader';
+import { MultiCascaderProps } from 'antd/lib/multi-cascader';
+import { MentionProps } from 'antd/lib/mention';
+import { AutoCompleteProps } from 'antd/lib/auto-complete';
 
 export type OptionProps = Omit<CascaderOptionType, 'value'>;
 
@@ -279,46 +279,47 @@ export interface RuleProps extends RuleItem {
 关于校验规则的一些使用场景，[跳转](/pages/reference/check)
 
 ## 单测覆盖情况
+
 ```
 -----------------------------------|---------|----------|---------|---------|-------------------
-File                               | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s 
+File                               | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s
 -----------------------------------|---------|----------|---------|---------|-------------------
-All files                          |    98.6 |     79.4 |   98.43 |   98.45 |                   
- src                               |   97.82 |    71.63 |   97.43 |   97.61 |                   
-  index.tsx                        |   97.82 |    71.63 |   97.43 |   97.61 | 245-246,265       
- src/common/config                 |   97.74 |    85.71 |   98.21 |   97.36 |                   
-  field.ts                         |   98.68 |     77.5 |     100 |   98.43 | 16                
-  index.ts                         |     100 |      100 |     100 |     100 |                   
-  operate.ts                       |     100 |    86.66 |     100 |     100 | 55-69             
-  render.tsx                       |   95.29 |    89.41 |   95.23 |   94.93 | 217,304,308,320   
- src/common/constants              |     100 |      100 |     100 |     100 |                   
-  element.tsx                      |     100 |      100 |     100 |     100 |                   
-  index.ts                         |     100 |      100 |     100 |     100 |                   
-  type.ts                          |     100 |      100 |     100 |     100 |                   
- src/common/hooks                  |     100 |      100 |     100 |     100 |                   
-  useForceUpdate.ts                |     100 |      100 |     100 |     100 |                   
- src/common/type                   |     100 |      100 |     100 |     100 |                   
-  index.ts                         |     100 |      100 |     100 |     100 |                   
-  static.d.ts                      |       0 |        0 |       0 |       0 |                   
- src/common/util                   |   99.37 |    80.85 |     100 |   99.32 |                   
-  index.ts                         |     100 |      100 |     100 |     100 |                   
-  watcher.ts                       |   99.26 |       80 |     100 |   99.21 | 171               
- src/components/VirtualItem        |   97.29 |    76.78 |   94.11 |   97.22 |                   
-  index.tsx                        |   97.29 |    76.78 |   94.11 |   97.22 | 110-111           
- src/components/VirtualLayout      |     100 |    81.25 |     100 |     100 |                   
-  index.tsx                        |     100 |    81.25 |     100 |     100 | 10-13             
- src/components/VirtualLink        |     100 |      100 |     100 |     100 |                   
-  index.tsx                        |     100 |      100 |     100 |     100 |                   
- src/components/VirtualNo          |     100 |      100 |     100 |     100 |                   
-  index.tsx                        |     100 |      100 |     100 |     100 |                   
- src/components/VirtualRequireItem |     100 |      100 |     100 |     100 |                   
-  index.tsx                        |     100 |      100 |     100 |     100 |                   
- src/components/VirtualText        |     100 |    70.83 |     100 |     100 |                   
-  index.tsx                        |     100 |    70.83 |     100 |     100 | 11-49             
- src/components/VirtualText/common |     100 |     87.5 |     100 |     100 |                   
-  util.ts                          |     100 |     87.5 |     100 |     100 | 12-16             
- src/methods                       |     100 |      100 |     100 |     100 |                   
-  index.ts                         |     100 |      100 |     100 |     100 |                   
+All files                          |    98.6 |     79.4 |   98.43 |   98.45 |
+ src                               |   97.82 |    71.63 |   97.43 |   97.61 |
+  index.tsx                        |   97.82 |    71.63 |   97.43 |   97.61 | 245-246,265
+ src/common/config                 |   97.74 |    85.71 |   98.21 |   97.36 |
+  field.ts                         |   98.68 |     77.5 |     100 |   98.43 | 16
+  index.ts                         |     100 |      100 |     100 |     100 |
+  operate.ts                       |     100 |    86.66 |     100 |     100 | 55-69
+  render.tsx                       |   95.29 |    89.41 |   95.23 |   94.93 | 217,304,308,320
+ src/common/constants              |     100 |      100 |     100 |     100 |
+  element.tsx                      |     100 |      100 |     100 |     100 |
+  index.ts                         |     100 |      100 |     100 |     100 |
+  type.ts                          |     100 |      100 |     100 |     100 |
+ src/common/hooks                  |     100 |      100 |     100 |     100 |
+  useForceUpdate.ts                |     100 |      100 |     100 |     100 |
+ src/common/type                   |     100 |      100 |     100 |     100 |
+  index.ts                         |     100 |      100 |     100 |     100 |
+  static.d.ts                      |       0 |        0 |       0 |       0 |
+ src/common/util                   |   99.37 |    80.85 |     100 |   99.32 |
+  index.ts                         |     100 |      100 |     100 |     100 |
+  watcher.ts                       |   99.26 |       80 |     100 |   99.21 | 171
+ src/components/VirtualItem        |   97.29 |    76.78 |   94.11 |   97.22 |
+  index.tsx                        |   97.29 |    76.78 |   94.11 |   97.22 | 110-111
+ src/components/VirtualLayout      |     100 |    81.25 |     100 |     100 |
+  index.tsx                        |     100 |    81.25 |     100 |     100 | 10-13
+ src/components/VirtualLink        |     100 |      100 |     100 |     100 |
+  index.tsx                        |     100 |      100 |     100 |     100 |
+ src/components/VirtualNo          |     100 |      100 |     100 |     100 |
+  index.tsx                        |     100 |      100 |     100 |     100 |
+ src/components/VirtualRequireItem |     100 |      100 |     100 |     100 |
+  index.tsx                        |     100 |      100 |     100 |     100 |
+ src/components/VirtualText        |     100 |    70.83 |     100 |     100 |
+  index.tsx                        |     100 |    70.83 |     100 |     100 | 11-49
+ src/components/VirtualText/common |     100 |     87.5 |     100 |     100 |
+  util.ts                          |     100 |     87.5 |     100 |     100 | 12-16
+ src/methods                       |     100 |      100 |     100 |     100 |
+  index.ts                         |     100 |      100 |     100 |     100 |
 -----------------------------------|---------|----------|---------|---------|-------------------
 ```
 

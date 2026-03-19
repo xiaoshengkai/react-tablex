@@ -1,7 +1,7 @@
 /** @format */
 
 import React, { useState } from 'react';
-import VirtualTable from 'react-tablex';
+import VirtualTable from '@xiaoshengkai/react-tablex';
 
 const columns = [
   {
