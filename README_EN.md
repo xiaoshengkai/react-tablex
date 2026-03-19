@@ -1,8 +1,8 @@
 # react-tablex
 
 <h1 align="center">
-  <a href="https://react-vformtable.com" target="_blank" rel="noopener noreferrer">
-    <img width="200" src="https://react-vformtable.com/logo.svg" alt="react-tablex logo">
+  <a href="https://xiaoshengkai.github.io/react-tablex/" target="_blank" rel="noopener noreferrer">
+    <img width="200" src="https://xiaoshengkai.github.io/react-tablex/logo.svg" alt="react-tablex logo">
   </a>
 </h1>
 
@@ -187,11 +187,11 @@ const columns = [
 
 ## API Documentation
 
-For detailed API documentation, visit [Official Docs](https://react-vformtable.com)
+For detailed API documentation, visit [Official Docs](https://xiaoshengkai.github.io/react-tablex/)
 
 ## Examples
 
-For more examples, see [Live Demos](https://react-vformtable.com/demo)
+For more examples, see [Live Demos](https://xiaoshengkai.github.io/react-tablex//demo)
 
 ## Development
 
