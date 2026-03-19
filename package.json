@@ -1,5 +1,5 @@
 {
-  "name": "react-tablex​",
+  "name": "react-tablex",
   "version": "1.0.0",
   "description": "React 高性能虚拟表格表单组件库 | 专为解决大数据渲染瓶颈而设计，提供配置化表格表单开发方案，内置数据监听体系，助力快速构建复杂业务场景",
   "author": "小盛开",
