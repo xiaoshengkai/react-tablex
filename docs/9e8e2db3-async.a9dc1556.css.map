@@ -1,0 +1,1 @@
+{"version":3,"sources":["pages/pages/reference/custom/code/index.less"],"sourcesContent":[".custom {\n  display: flex;\n  align-items: center;\n  height: 30px;\n}\n@dark-selector: ~'[data-prefers-color=\"dark\"]';"],"names":[],"mappings":"AAAA,CAAA,MAAA,CAAA,AACE,OAAA,CAAA,IAAA,CACA,WAAA,CAAA,MAAA,CACA,MAAA,CAAA,EAAA,EAAA,CAAA"}

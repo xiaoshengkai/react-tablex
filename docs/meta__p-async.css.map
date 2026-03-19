@@ -1,1 +1,0 @@
-{"version":3,"sources":["pages/pages/reference/custom/code/index.less"],"sourcesContent":[".custom {\n  display: flex;\n  align-items: center;\n  height: 30px;\n}\n@dark-selector: ~'[data-prefers-color=\"dark\"]';"],"names":[],"mappings":"AAAA,CAAA,eAAA,CAAA,CAAA;EACE,OAAA,EAAA,IAAA;EACA,WAAA,EAAA,MAAA;EACA,MAAA,EAAA,EAAA,EAAA;AAAA,CAAA"}
