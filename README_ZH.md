@@ -12,8 +12,8 @@
 
 <div align="center">
 
-[![npm version](https://img.shields.io/npm/v/react-tablex.svg)](https://www.npmjs.com/package/react-tablex)
-[![npm downloads](https://img.shields.io/npm/dm/react-tablex.svg)](https://www.npmjs.com/package/react-tablex)
+[![npm version](https://img.shields.io/npm/v/%40xiaoshengkai%2Freact-tablex.svg)](https://www.npmjs.com/package/@xiaoshengkai/react-tablex)
+[![npm downloads](https://img.shields.io/npm/dm/%40xiaoshengkai%2Freact-tablex.svg)](https://www.npmjs.com/package/@xiaoshengkai/react-tablex)
 [![license](https://img.shields.io/github/license/xiaoshengkai/react-tablex)](https://github.com/xiaoshengkai/react-tablex/blob/main/LICENSE)
 [![stars](https://img.shields.io/github/stars/xiaoshengkai/react-tablex)](https://github.com/xiaoshengkai/react-tablex/stargazers)
 
@@ -45,11 +45,11 @@
 ## 安装
 
 ```bash
-npm install react-tablex
+npm install @xiaoshengkai/react-tablex
 # 或
-yarn add react-tablex
+yarn add @xiaoshengkai/react-tablex
 # 或
-pnpm add react-tablex
+pnpm add @xiaoshengkai/react-tablex
 ```
 
 ## 快速开始
