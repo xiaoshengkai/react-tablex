@@ -1,7 +1,7 @@
 /** @format */
 
 import React, { useRef, useState } from 'react';
-import VirtualTable from 'react-tablex';
+import VirtualTable from '@xiaoshengkai/react-tablex';
 import { Button, Modal, Form, InputNumber } from 'antd';
 import { Input } from 'antd';
 

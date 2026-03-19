@@ -1,6 +1,6 @@
 /** @format */
 
-import VirtualTable, { Operate } from 'react-tablex';
+import VirtualTable, { Operate } from '@xiaoshengkai/react-tablex';
 import React, { useState } from 'react';
 
 const columns = [

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import VirtualTable, { Layout } from 'react-tablex';
+import VirtualTable, { Layout } from '@xiaoshengkai/react-tablex';
 
 const columns = [
   {

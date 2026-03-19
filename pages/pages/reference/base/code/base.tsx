@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { InputNumber } from 'antd';
-import VirtualTable from 'react-tablex';
+import VirtualTable from '@xiaoshengkai/react-tablex';
 
 const columns = [
   {

@@ -1,4 +1,4 @@
-import VirtualTable from 'react-tablex';
+import VirtualTable from '@xiaoshengkai/react-tablex';
 import React, { useState } from 'react';
 
 const columns = [
