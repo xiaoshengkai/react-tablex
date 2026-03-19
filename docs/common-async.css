@@ -1,0 +1,133 @@
+.virtualNo {
+  padding: 3px 6px;
+}
+.virtual_item {}
+.virtual_item .doraemon-input, 
+.virtual_item .doraemon-input-number, 
+.virtual_item .doraemon-input-affix-wrapper, 
+.virtual_item .doraemon-select, 
+.virtual_item .doraemon-input-amount {
+  width: 100%;
+}
+.virtual_item {
+  width: 100%;
+}
+.virtual_item:last-child {
+  margin-bottom: 0;
+}
+.virtual_item--error {
+  color: #f00;
+  padding: 5px;
+}
+.doraemon-input:has(.virtual_item--children) {
+  border-color: #f00 !important;
+}
+.virtual_item--children {
+  border-color: #f00 !important;
+}
+.virtual_item--children div, 
+.virtual_item--children input, 
+.virtual_item--children textarea {
+  border-color: #f00 !important;
+}
+.virtual_item_label--wrap {
+  display: inline-grid;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+}
+.virtual_item_children--wrap {
+  width: calc(100% - 16px) !important;
+  display: inline-grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  padding: 8px;
+}
+.virtual_item_children--prefix {
+  width: 100%;
+  margin-right: 5px;
+}
+.virtual_item_children--suffix {
+  width: 100%;
+  margin-left: 5px;
+}
+.virtual_item span.doraemon-radio + * {
+  padding-right: 8px;
+}
+.virtualLayout {
+  width: 100%;
+  padding: 0 8px;
+  box-sizing: border-box;
+}
+.virtualLayout .virtual_item--horizontal {
+  display: flex;
+  align-items: center;
+}
+.virtualLayout .virtual_item--horizontal .virtual_item {
+  margin-bottom: 0;
+}
+.virtualLayout .virtual_item--horizontal .virtual_item:last-child {
+  margin-bottom: 10px;
+  margin-bottom: 0;
+}
+.virtual-require-item .x {
+  color: #f10c0c;
+  margin-right: 5px;
+}
+.virtual-text {
+  padding: 0 8px;
+}
+.virtualTable .ant-table-cell {
+  padding: 0;
+}
+.virtualTable .ant-btn-link {
+  padding: 0;
+}
+.virtualTable .ant-input-number {
+  width: 100% !important;
+}
+.virtualTable {
+  position: relative;
+}
+.virtualTable_wrap {
+  overflow: auto;
+}
+.virtualTable_wrap--empty {
+  height: 204px;
+}
+.virtualTable_footer {
+  line-height: 44px;
+  background-color: #fff;
+  text-align: center;
+  border-bottom: 1px solid #eee;
+  border-right: 1px solid #eee;
+  border-left: 1px solid #eee;
+}
+.virtualTable_empty {
+  width: 100%;
+  height: 160px;
+  text-align: center;
+  color: rgba(0, 0, 0, 0.45);
+  font-size: 14px;
+  border-top: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+.virtualTable_empty > * {
+  pointer-events: auto;
+}
+.virtualTable_operate {
+  display: flex;
+  padding: 8px 8px 8px 16px;
+}
+.virtualTable_operate__vertical {
+  flex-direction: column;
+}
+.virtualTable .ant-table-measure-row {
+  display: none;
+}
+.tsInfo {
+  margin-top: 16px;
+}
+/*# sourceMappingURL=common-async.css.map*/
