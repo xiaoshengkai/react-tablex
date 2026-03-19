@@ -9,6 +9,7 @@ package-lock.json
 /esm
 /lib
 coverage
+opencode.json
 .opencode/
 work-logs/
-opencode.json
+docs/

@@ -2,7 +2,7 @@ import { defineConfig } from 'dumi';
 import { defineThemeConfig } from 'dumi-theme-antd/dist/defineThemeConfig';
 
 export default defineConfig({
-  outputPath: 'build',
+  outputPath: 'docs',
   logo: false,
   favicons: ['https://cdn.zcycdn.com/zcy/desktop/media/img/favicon.ico'],
   themeConfig: defineThemeConfig({
@@ -60,6 +60,7 @@ export default defineConfig({
   apiParser: {},
   resolve: {
     entryFile: './src/index.tsx',
+    docDirs: ['pages'],
   },
   alias: {
     'react-VFormTable': require('path').resolve(__dirname, 'src/index.tsx'),
