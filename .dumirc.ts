@@ -1,5 +1,8 @@
 import { defineConfig } from 'dumi';
 import { defineThemeConfig } from 'dumi-theme-antd/dist/defineThemeConfig';
+import packageJson from './package.json';
+
+console.log('packageJsonpackageJson', packageJson.name)
 
 export default defineConfig({
   outputPath: 'docs',
@@ -8,7 +11,7 @@ export default defineConfig({
   themeConfig: defineThemeConfig({
     title: '虚拟表格表单',
     name: 'react-tablex',
-    github: 'https://git.cai-inc.com/f2e-cube/quark/pc-virtual-table-front',
+    github: 'https://github.com/xiaoshengkai/react-tablex.git',
     footer: false,
     rtl: true,
     lastUpdated: false,
@@ -65,6 +68,6 @@ export default defineConfig({
   alias: {
     'react-tablex': require('path').resolve(__dirname, 'src/index.tsx'),
   },
-  base: process.env.DOC_BASE || '/',
-  publicPath: process.env.DOC_ASSET_PREFIX || '/',
+  base: process.env.DOC_BASE || '/' + packageJson.name + '/',
+  publicPath: process.env.DOC_ASSET_PREFIX || '/' + packageJson.name + '/',
 });
