@@ -1,6 +1,6 @@
 /** @format */
 
-import VirtualTable, { Operate } from 'react-VFormTable';
+import VirtualTable, { Operate } from 'react-tablex';
 import React, { useState } from 'react';
 
 const columns = [

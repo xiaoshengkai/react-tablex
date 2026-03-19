@@ -2,7 +2,7 @@
 title: 虚拟表格表单
 ---
 
-`react-VFormTable`是基于 `rc-table` + `自定义表格表单系统` + `自定义UI库` 编写的 React UI 组件库，用于快速编写表格表单业务，解决大数据渲染瓶颈。
+`react-tablex`是基于 `rc-table` + `自定义表格表单系统` + `自定义UI库` 编写的 React UI 组件库，用于快速编写表格表单业务，解决大数据渲染瓶颈。
 
 ### ✨ 特性：
 
@@ -16,15 +16,15 @@ title: 虚拟表格表单
 :::code-group
 
 ```bash [npm]
-npm install -D react-VFormTable
+npm install -D react-tablex
 ```
 
 ```bash [yarn]
-yarn add -D react-VFormTable
+yarn add -D react-tablex
 ```
 
 ```bash [pnpm]
-pnpm add -D react-VFormTable
+pnpm add -D react-tablex
 ```
 
 :::
@@ -33,7 +33,7 @@ pnpm add -D react-VFormTable
 
 ```jsx | pure
 import React from 'react';
-import VirtualTable from 'react-VFormTable';
+import VirtualTable from 'react-tablex';
 
 const columns = [
   {

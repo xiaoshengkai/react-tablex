@@ -9,8 +9,8 @@
     "baseUrl": "./",
     "paths": {
       "@@/*": [".dumi/tmp/*"],
-      "react-VFormTable": ["src"],
-      "react-VFormTable/*": ["src/*", "*"]
+      "react-tablex": ["src"],
+      "react-tablex/*": ["src/*", "*"]
     }
   },
   "ts-node": {

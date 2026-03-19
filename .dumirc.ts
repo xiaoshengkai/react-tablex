@@ -7,7 +7,7 @@ export default defineConfig({
   favicons: ['https://cdn.zcycdn.com/zcy/desktop/media/img/favicon.ico'],
   themeConfig: defineThemeConfig({
     title: '虚拟表格表单',
-    name: 'react-VFormTable',
+    name: 'react-tablex',
     github: 'https://git.cai-inc.com/f2e-cube/quark/pc-virtual-table-front',
     footer: false,
     rtl: true,
@@ -63,7 +63,7 @@ export default defineConfig({
     docDirs: ['pages'],
   },
   alias: {
-    'react-VFormTable': require('path').resolve(__dirname, 'src/index.tsx'),
+    'react-tablex': require('path').resolve(__dirname, 'src/index.tsx'),
   },
   base: process.env.DOC_BASE || '/',
   publicPath: process.env.DOC_ASSET_PREFIX || '/',

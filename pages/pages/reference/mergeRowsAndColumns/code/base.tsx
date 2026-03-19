@@ -1,4 +1,4 @@
-import VirtualTable from 'react-VFormTable';
+import VirtualTable from 'react-tablex';
 import React, { useState } from 'react';
 
 const colHideOnCell = (_, index) => {

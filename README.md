@@ -1,8 +1,8 @@
-# react-VFormTable
+# react-tablex
 
 <h1 align="center">
   <a href="https://react-vformtable.com" target="_blank" rel="noopener noreferrer">
-    <img width="200" src="https://react-vformtable.com/logo.svg" alt="react-VFormTable">
+    <img width="200" src="https://react-vformtable.com/logo.svg" alt="react-tablex">
   </a>
 </h1>
 
@@ -14,8 +14,8 @@
 
 [![npm version](https://img.shields.io/npm/v/react-vformtable.svg)](https://www.npmjs.com/package/react-vformtable)
 [![npm downloads](https://img.shields.io/npm/dm/react-vformtable.svg)](https://www.npmjs.com/package/react-vformtable)
-[![license](https://img.shields.io/github/license/xiaoshengkai/react-VFormTable)](https://github.com/xiaoshengkai/react-VFormTable/blob/main/LICENSE)
-[![stars](https://img.shields.io/github/stars/xiaoshengkai/react-VFormTable)](https://github.com/xoshengkai/react-VFormTable/stargazers)
+[![license](https://img.shields.io/github/license/xiaoshengkai/react-tablex)](https://github.com/xiaoshengkai/react-tablex/blob/main/LICENSE)
+[![stars](https://img.shields.io/github/stars/xiaoshengkai/react-tablex)](https://github.com/xoshengkai/react-tablex/stargazers)
 
 </div>
 
@@ -59,7 +59,7 @@ pnpm add react-vformtable
 
 ```tsx
 import React, { useState } from 'react';
-import VirtualTable from 'react-VFormTable';
+import VirtualTable from 'react-tablex';
 
 const columns = [
   {
@@ -113,7 +113,7 @@ export default () => {
 };
 ```
 
-更多示例请查看 [docs/pages/](https://github.com/xiaoshengkai/react-VFormTable/tree/main/docs/pages) 目录
+更多示例请查看 [docs/pages/](https://github.com/xiaoshengkai/react-tablex/tree/main/docs/pages) 目录
 
 ## 核心概念
 
@@ -197,7 +197,7 @@ const columns = [
 
 ```bash
 # 克隆仓库
-git clone https://github.com/xiaoshengkai/react-VFormTable.git
+git clone https://github.com/xiaoshengkai/react-tablex.git
 
 # 安装依赖
 pnpm install

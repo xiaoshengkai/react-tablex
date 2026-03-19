@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import VirtualTable, { Way } from 'react-VFormTable';
+import VirtualTable, { Way } from 'react-tablex';
 import { InputNumber } from 'antd';
 
 const Demo = () => {

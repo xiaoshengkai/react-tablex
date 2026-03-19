@@ -1,6 +1,6 @@
 import { Input, Radio, Switch } from 'antd';
 import React, { useState } from 'react';
-import VirtualTable from 'react-VFormTable';
+import VirtualTable from 'react-tablex';
 import './index.less';
 
 const RadioGroup = Radio.Group;

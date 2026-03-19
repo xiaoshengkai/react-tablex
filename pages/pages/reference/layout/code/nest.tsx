@@ -1,5 +1,5 @@
 import React, { Children, useState } from 'react';
-import VirtualTable, { Layout } from 'react-VFormTable';
+import VirtualTable, { Layout } from 'react-tablex';
 
 const columns = [
   {

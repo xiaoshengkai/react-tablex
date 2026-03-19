@@ -1,7 +1,7 @@
 
 
 import React, { useState } from 'react';
-import VirtualTable, { Way } from 'react-VFormTable';
+import VirtualTable, { Way } from 'react-tablex';
 
 const columns = [
   {

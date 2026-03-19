@@ -1,7 +1,7 @@
 /** @format */
 
 import React, { useRef, useState } from 'react';
-import VirtualTable from 'react-VFormTable';
+import VirtualTable from 'react-tablex';
 import { Button, message } from 'antd';
 
 const columns = [

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import VirtualTable, { Operate } from 'react-VFormTable';
+import VirtualTable, { Operate } from 'react-tablex';
 
 const columns = [
   {

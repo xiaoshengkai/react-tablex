@@ -1,6 +1,6 @@
 import { InputNumber } from 'antd';
 import React, { useState } from 'react';
-import VirtualTable, { Operate, Way } from 'react-VFormTable';
+import VirtualTable, { Operate, Way } from 'react-tablex';
 
 const InputNumberRange = ({ value, onChange }) => {
   const [f, l] = value || [];

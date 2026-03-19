@@ -1,7 +1,7 @@
 /** @format */
 
 import React, { useState } from 'react';
-import VirtualTable, { Operate } from 'react-VFormTable';
+import VirtualTable, { Operate } from 'react-tablex';
 import { Divider, Radio } from 'antd';
 
 const RadioButton = Radio.Button;
